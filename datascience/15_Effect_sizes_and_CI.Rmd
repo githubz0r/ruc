@@ -1,0 +1,433 @@
+---
+title: "15 - Effect sizes and confidence intervals"
+author: "John Shorter"
+date: "Mar/19/2026"
+output:
+  html_document:
+    toc: yes
+  html_notebook:
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+editor_options:
+  markdown:
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(magrittr)
+```
+
+# Introduction
+
+A p-value can tell you whether your data are inconsistent with a null hypothesis, but it does not tell you how large an effect is.
+In applied research, we usually care about both:
+
+1. **Effect size**: how big is the difference/relationship (and in what direction)?
+2. **Uncertainty**: how precise is our estimate (often summarized with a confidence interval)?
+
+In this lesson, we will use the built-in `iris` dataset to:
+
+- estimate mean differences and their 95% confidence intervals
+- estimate a standardized effect size (Cohen's d) and an approximate 95% confidence interval
+- create **forest plots** to communicate effect sizes + confidence intervals
+
+A forest plot is basically a clean way to show an estimate (dot) and its uncertainty (horizontal line).
+It is often easier to read than a table, especially when you have multiple comparisons or multiple model coefficients.
+
+# Packages and data
+
+```{r}
+library(tidyverse)
+library(broom)
+
+data("iris")
+iris_tbl <- as_tibble(iris)
+
+glimpse(iris_tbl)
+summary(iris_tbl)
+```
+
+# Example 1: Mean difference with a 95% CI
+
+Let's compare **Sepal.Length** between two species.
+
+```{r}
+dat_sv <- iris_tbl %>%
+  filter(Species %in% c("setosa", "versicolor")) %>%
+  mutate(Species = droplevels(Species))
+
+dat_sv %>%
+  group_by(Species) %>%
+  summarise(
+    n = n(),
+    mean_sepal_length = mean(Sepal.Length),
+    sd_sepal_length = sd(Sepal.Length)
+  )
+```
+
+A two-sample t-test gives a confidence interval for the mean difference.
+
+```{r}
+test_sv <- t.test(Sepal.Length ~ Species, data = dat_sv)
+test_sv
+```
+
+**Interpretation tip:**
+
+- The estimate is the mean difference (group 1 minus group 2, based on factor ordering).
+- The 95% CI is a plausible range of values for the mean difference (under the model assumptions).
+- A narrow CI means higher precision; a wide CI means lower precision.
+
+# Example 2: Cohen's d (standardized effect size) + bootstrap CI
+
+A mean difference is in the original units (cm, in this case).
+Sometimes we also want a **standardized effect size**.
+A very common one is **Cohen's d**, which is the mean difference divided by the pooled standard deviation.
+
+```{r}
+## Cohen's d is defined for **two groups** at a time.
+## We'll write a small helper for two-group d, and then (later)
+## reuse it for pairwise comparisons when there are >2 groups.
+
+cohens_d_two_group <- function(x, g) {
+  # x: numeric vector
+  # g: group vector with exactly 2 groups
+  g <- droplevels(as.factor(g))
+  if (length(levels(g)) != 2) {
+    stop(
+      "Cohen's d requires exactly 2 groups. ",
+      "Filter your data to two groups (e.g., two Species) ",
+      "or use the pairwise function shown in Example 3."
+    )
+  }
+
+  x1 <- x[g == levels(g)[1]]
+  x2 <- x[g == levels(g)[2]]
+
+  m1 <- mean(x1)
+  m2 <- mean(x2)
+  s1 <- sd(x1)
+  s2 <- sd(x2)
+
+  n1 <- length(x1)
+  n2 <- length(x2)
+
+  sp <- ((n1 - 1) * s1^2 + (n2 - 1) * s2^2) / (n1 + n2 - 2)
+  sp <- sqrt(sp)
+
+  (m1 - m2) / sp
+}
+
+# A friendly wrapper: if you accidentally pass >2 groups (e.g., all 3 iris species),
+# we return *pairwise* Cohen's d for each pair instead of erroring.
+cohens_d <- function(x, g) {
+  g <- droplevels(as.factor(g))
+  if (length(levels(g)) == 2) {
+    return(cohens_d_two_group(x, g))
+  }
+
+  pairs <- combn(levels(g), 2, simplify = FALSE)
+  purrr::map_dfr(pairs, function(p) {
+    keep <- g %in% p
+    d <- cohens_d_two_group(x[keep], droplevels(g[keep]))
+    tibble(
+      comparison = paste(p[1], "vs", p[2]),
+      d = d
+    )
+  })
+}
+
+cohens_d(dat_sv$Sepal.Length, dat_sv$Species)
+```
+
+To get an approximate confidence interval for Cohen's d, we will use a simple bootstrap.
+We resample rows with replacement, compute d each time, and then take the 2.5% and 97.5% quantiles.
+
+```{r}
+set.seed(1)
+B <- 2000
+
+# Use a *stratified* bootstrap so both groups are always represented.
+idx_by_group <- split(seq_len(nrow(dat_sv)), dat_sv$Species)
+boot_d <- replicate(B, {
+  idx <- unlist(lapply(idx_by_group, function(ind) sample(ind, length(ind), replace = TRUE)))
+  cohens_d_two_group(dat_sv$Sepal.Length[idx], dat_sv$Species[idx])
+})
+
+d_hat <- cohens_d_two_group(dat_sv$Sepal.Length, dat_sv$Species)
+ci_d <- quantile(boot_d, probs = c(0.025, 0.975))
+
+d_hat
+ci_d
+```
+
+**Interpretation tip:**
+
+- Cohen's d is in SD units.
+- The sign tells direction (which group is larger, given the group ordering).
+- The magnitude is context dependent.
+  Rules of thumb (often cited) are small/medium/large ≈ 0.2/0.5/0.8, but do not apply blindly.
+
+# Example 3: Many comparisons + a forest plot
+
+Now let's estimate Cohen's d and 95% bootstrap CI for all pairwise species comparisons.
+
+```{r}
+pairwise_species <- combn(levels(iris_tbl$Species), 2, simplify = FALSE)
+
+compute_d_boot <- function(dat, x, g, B = 2000, seed = 1) {
+  set.seed(seed)
+  d_hat <- cohens_d_two_group(dat[[x]], dat[[g]])
+
+  boot_d <- replicate(B, {
+    idx <- sample.int(nrow(dat), size = nrow(dat), replace = TRUE)
+    cohens_d_two_group(dat[[x]][idx], dat[[g]][idx])
+  })
+
+  ci <- quantile(boot_d, probs = c(0.025, 0.975))
+  tibble(
+    d = d_hat,
+    d_low = unname(ci[1]),
+    d_high = unname(ci[2])
+  )
+}
+
+results_d <- map_dfr(pairwise_species, function(p) {
+  dat_pair <- iris_tbl %>% filter(Species %in% p) %>% mutate(Species = droplevels(Species))
+  out <- compute_d_boot(dat_pair, x = "Sepal.Length", g = "Species", B = 1500, seed = 1)
+  out %>% mutate(
+    comparison = paste(levels(dat_pair$Species)[1], "vs", levels(dat_pair$Species)[2])
+  )
+})
+
+results_d
+```
+
+Now make a forest plot.
+
+```{r}
+results_d %>%
+  ggplot(aes(y = comparison, x = d, xmin = d_low, xmax = d_high)) +
+  geom_vline(xintercept = 0, linetype = 2) +
+  geom_pointrange() +
+  labs(
+    x = "Cohen's d (Sepal.Length)",
+    y = NULL,
+    title = "Effect sizes (Cohen's d) with 95% bootstrap confidence intervals"
+  ) +
+  theme_minimal()
+```
+
+**Interpretation tip:**
+
+- If the CI crosses 0, the data are compatible with no standardized difference (in this simple resampling sense).
+- If the CI is far from 0, the difference is both large and more precisely estimated.
+
+# Example 4: Forest plot of model coefficients
+
+Forest plots are also useful for regression coefficients.
+Here, we fit a simple linear model predicting **Sepal.Length** using **Species** and **Petal.Length**.
+
+```{r}
+fit <- lm(Sepal.Length ~ Species + Petal.Length, data = iris_tbl)
+summary(fit)
+```
+
+Extract coefficients and 95% confidence intervals.
+
+```{r}
+coef_tbl <- tidy(fit, conf.int = TRUE) %>%
+  filter(term != "(Intercept)")
+
+coef_tbl
+```
+
+Now plot the coefficients.
+
+```{r}
+coef_tbl %>%
+  ggplot(aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high)) +
+  geom_vline(xintercept = 0, linetype = 2) +
+  geom_pointrange() +
+  labs(
+    x = "Estimate (with 95% CI)",
+    y = NULL,
+    title = "Forest plot of linear model coefficients"
+  ) +
+  theme_minimal()
+```
+
+**Interpretation tip:**
+
+- For a coefficient, the estimate is the expected change in the outcome for a 1-unit increase in the predictor (holding other variables constant).
+- For a factor like Species, the coefficient is a difference relative to the reference level.
+
+# Practice exercises
+
+Now you have learned how to estimate effect sizes, confidence intervals, and visualize them as forest plots.
+It's time to practice.
+
+We will continue using `iris`.
+
+```{r}
+iris_tbl <- as_tibble(iris)
+```
+
+## Exercise 1 (in-class practice): Mean difference + CI
+
+Compare **Petal.Length** between *versicolor* and *virginica* using a t-test.
+Report the estimated mean difference and the 95% CI.
+
+```{r}
+iris_ve_vi <- iris_tbl %>% filter(Species %in% c('versicolor', 'virginica'))
+test_vv <- t.test(Petal.Length ~ Species, data = iris_ve_vi)
+test_vv
+
+```
+
+## What to submit to Moodle (Pass/Fail)
+
+For this lesson, complete the exercises **in your shared Exercise Pack** (the file `Exercise_Pack_Template.Rmd`).
+Then **Knit to HTML** and upload the HTML file to the Moodle exercise folder.
+
+**File name format:** `Lastname_Firstname_L15.html`
+
+### Satisfactory / Not satisfactory (what I check)
+
+Your submission is **Satisfactory** if:
+
+- It **knits** (HTML opens and shows your work).
+- You included **outputs** (tables/plots/model output) that match the lesson.
+- You answered the **Self-check checklist** (short, honest, and complete).
+- Your work is **plausible** (right method for the lesson, correct variables, no obvious copy/paste without results).
+
+If one or more of these are missing, it is **Not satisfactory** (and you resubmit).
+
+## Additional exercises (complete these in your Exercise Pack)
+
+### Exercise 2 — Cohen's d for a new comparison
+
+Compute Cohen's d for **Petal.Width** comparing *setosa* vs *versicolor*.
+Compute a bootstrap 95% CI (you can reuse the code from the lesson).
+
+```{r}
+cohens_d(dat_sv$Petal.Width, dat_sv$Species)
+set.seed(1)
+B <- 2000
+
+# Use a *stratified* bootstrap so both groups are always represented.
+idx_by_group <- split(seq_len(nrow(dat_sv)), dat_sv$Species)
+boot_d <- replicate(B, {
+  idx <- unlist(lapply(idx_by_group, function(ind) sample(ind, length(ind), replace = TRUE)))
+  cohens_d_two_group(dat_sv$Petal.Width[idx], dat_sv$Species[idx])
+})
+
+d_hat <- cohens_d_two_group(dat_sv$Petal.Width, dat_sv$Species)
+ci_d <- quantile(boot_d, probs = c(0.025, 0.975))
+
+d_hat
+ci_d
+```
+
+
+
+**Self-check:** your CI is a numeric interval; `d` direction matches the group means.
+
+### Exercise 3 — Forest plot of pairwise effect sizes
+
+Compute Cohen's d (and a bootstrap 95% CI) for **Sepal.Width** for all pairwise species comparisons.
+Make a forest plot.
+
+```{r}
+pairwise_species <- combn(levels(iris_tbl$Species), 2, simplify = FALSE)
+
+compute_d_boot <- function(dat, x, g, B = 2000, seed = 1) {
+  set.seed(seed)
+  d_hat <- cohens_d_two_group(dat[[x]], dat[[g]])
+
+  boot_d <- replicate(B, {
+    idx <- sample.int(nrow(dat), size = nrow(dat), replace = TRUE)
+    cohens_d_two_group(dat[[x]][idx], dat[[g]][idx])
+  })
+
+  ci <- quantile(boot_d, probs = c(0.025, 0.975))
+  tibble(
+    d = d_hat,
+    d_low = unname(ci[1]),
+    d_high = unname(ci[2])
+  )
+}
+
+results_d <- map_dfr(pairwise_species, function(p) {
+  dat_pair <- iris_tbl %>% filter(Species %in% p) %>% mutate(Species = droplevels(Species))
+  out <- compute_d_boot(dat_pair, x = "Sepal.Length", g = "Species", B = 1500, seed = 1)
+  out %>% mutate(
+    comparison = paste(levels(dat_pair$Species)[1], "vs", levels(dat_pair$Species)[2])
+  )
+})
+
+results_d
+
+results_d %>%
+  ggplot(aes(y = comparison, x = d, xmin = d_low, xmax = d_high)) +
+  geom_vline(xintercept = 0, linetype = 2) +
+  geom_pointrange() +
+  labs(
+    x = "Cohen's d (Sepal.Length)",
+    y = NULL,
+    title = "Effect sizes (Cohen's d) with 95% bootstrap confidence intervals"
+  ) +
+  theme_minimal()
+
+```
+
+
+
+**Self-check:** you have 3 comparisons; the plot has one point-range per comparison and a vertical line at 0.
+
+### Exercise 4 — Regression coefficient forest plot
+
+Fit a linear model: `Petal.Length ~ Species + Sepal.Length`.
+Extract coefficient estimates with 95% CI and make a forest plot.
+
+```{r}
+fit_p_ss <- lm(Petal.Length ~ Species + Sepal.Length, data = iris_tbl)
+summary(fit_p_ss)
+
+coef_tbl_p_ss <- tidy(fit_p_ss, conf.int = TRUE) %>%
+  filter(term != "(Intercept)")
+
+coef_tbl_p_ss
+```
+
+plot the coefficients
+
+```{r}
+coef_tbl_p_ss %>%
+  ggplot(aes(y = term, x = estimate, xmin = conf.low, xmax = conf.high)) +
+  geom_vline(xintercept = 0, linetype = 2) +
+  geom_pointrange() +
+  labs(
+    x = "Estimate (with 95% CI)",
+    y = NULL,
+    title = "Forest plot of linear model coefficients"
+  ) +
+  theme_minimal()
+```
+
+
+**Self-check:** your plot includes one row per non-intercept term; at least one coefficient CI does not cross 0.
+
+### Exercise 5 — Interpretation in words
+
+Choose one result you produced (either Cohen's d or a regression coefficient).
+Write a short interpretation in plain language, and include one sentence about uncertainty.
+
+#### confidence intervals
+
+The confidence intervals in the forest plot for the model coefficients of Petal length vs species + sepal length show how likely we are to believe that the realization of the estimate lies within that interval. The smaller the confidence interval the more certain we are about our estimate.
+
+
+**Self-check:** your interpretation matches the sign/direction and references the CI width or whether it crosses 0.

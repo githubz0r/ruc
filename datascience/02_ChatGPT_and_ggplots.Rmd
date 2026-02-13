@@ -1,0 +1,247 @@
+---
+title: "02 - ChatGPT and ggplots"
+author: "Lars Christoffersen"
+date: "Feb/16/2026"
+output:
+  html_document:
+    toc: yes  
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(magrittr)
+```
+
+# Introduction
+
+Let's use the R built-in dataset CO2 as an example: Ref: Potvin, C., Lechowicz, M. J.
+and Tardif, S.
+(1990), Ecology, 71, 1389--1400.
+
+```{r}
+head(CO2)
+names(CO2)
+str(CO2)
+```
+
+Task: produce a plot using chatGPT (https://openai.com/blog/chatgpt) or RTutor (https://rtutor.ai/) or another AI tool.
+
+
+# What to ask the AI?
+
+LLMs are powerful tools that can assist data scientists in various tasks, from coding to data analysis. The prompts that you give to the AI are very important. Changing certain words can give you very different results. Here are some examples of prompts you can ask of these AI tools
+
+General R Coding Prompts
+
+*  Data Import: “How do I import data from an excel file into R?”
+*  Data Wrangling: “Show me how to filter rows in a dataframe based on a condition in R.”
+
+Debugging R Code
+
+*  Error Identification: “I’m getting an unexpected error in this R code snippet. Can you help me identify the problem?”
+*  Code Optimization: “Can you suggest ways to make this R code run faster?”
+
+Statistical Analysis
+
+*  Descriptive Statistics: “Provide me with a summary of the basic descriptive statistics for this dataframe in R.”
+*  Hypothesis Testing: “Explain how to perform a t-test in R.”
+
+Visualization
+
+*  Plot Creation: “How do I create a boxplot with ggplot2 in R?”
+*  Customization: “Show me how to customize the axes labels and title of a plot in R.”
+
+R Markdown
+
+*  Report Generation: “What’s the syntax for creating a header in R Markdown?”
+*  Dynamic Reporting: “Explain how to include R code chunks in an R Markdown document for dynamic report generation.”
+
+## Prompt template you can copy/paste
+
+Try something like this (and feel free to edit the details):
+
+```
+Using the built-in dataset CO2 in R, write ggplot2 code that makes a clear, publication-quality plot of uptake vs conc.
+- Use only variables that actually exist in CO2 (do not invent columns).
+- Include a title and axis labels.
+- Use theme_minimal().
+- Do not create fake example data.
+- Return code only.
+```
+
+
+# Warnings about using AI to generate code
+
+Everything you ask using these tools gets sent to OpenAI's servers. Don't use ChatGPT tools to process sensitive information.
+
+**Privacy note:** never paste patient identifiers / sensitive clinical notes / anything you wouldn’t email.
+
+**Academic integrity:** you may use AI tools to help you learn, but you must understand what you submit.
+If you use AI assistance, include one sentence in your write-up describing *how* you used it and what you verified (e.g., “I used an AI tool to draft ggplot code, then checked `names()`/`str()` and edited the final version myself.”).
+
+ChatGPT may confidently return incorrect answers. Even incorrect responses can be a starting point, and save you time, but don't assume the code will do exactly what you expect. 
+
+One major thing to be aware of is that **ChatGPT will often make fake data as an example**. DO NOT just copy and paste everything. Be critical of the output and think before you incorporate it in your code.
+
+> **Quick verification checklist (before you trust AI code)**
+> - Run `names(CO2)` (or `names(your_data)`) and confirm the variables exist.
+> - Run `str(CO2)` (or `str(your_data)`) and confirm variable *types* (numeric, factor, character, etc.).
+> - Watch for invented columns (a common ggplot gotcha, like `Treatment2`, `Group`, `Outcome`, etc.).
+>   If a variable doesn’t exist, fix the mapping or re-prompt the AI.
+
+ChatGPT can also generate different responses to the same query—and some answers might be accurate while others aren't. For instance, when I asked multiple times for a ggplot2 bar chart with blue bars, the code generated a graph with blue bars sometimes but not others, even though I submitted the same request each time. This is less than ideal if you need a reproducible workflow.
+
+LLMs have training data cutoff dates, so if there's been a recent update to a package you're using, your tool of choice may not know about it.
+
+
+# Now you try 
+
+Enter in your AI assisted R code below and produce a publication quality figure.
+
+Before you paste code into your report, quickly check `names(CO2)` and `str(CO2)` so you can catch “fake” variables before they waste your time.
+
+
+```{r}
+# Remember to comment your text
+data(CO2)
+# Create a publication-quality plot
+ggplot(CO2, aes(x = conc, y = uptake, 
+                color = Treatment, 
+                shape = Type)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_smooth(method = "loess", se = TRUE, linewidth = 1) +
+  labs(
+    title = "CO₂ Uptake vs Concentration in Grass Plants",
+    subtitle = "Grouped by Treatment and Plant Type",
+    x = "CO₂ Concentration (mL/L)",
+    y = "CO₂ Uptake Rate (μmol/m²/s)",
+    color = "Treatment",
+    shape = "Plant Type"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16),
+    plot.subtitle = element_text(size = 12),
+    legend.position = "right",
+    panel.grid.minor = element_blank()
+  )
+
+
+```
+
+
+
+I would like you to enter here what prompts you used, and tell me what worked and what did not work
+
+```{r}
+# I used the prompt:
+# Using the built-in dataset CO2 in R, write ggplot2 code that makes a clear, publication-quality plot of uptake vs conc.
+# but I had to use chatGPT as RTutor crashed for some reason.
+
+
+
+```
+
+# Other things to know
+
+##  RTutor
+
+This app is an elegant and easy way to sample ChatGPT and R. Upload a data set, ask a question, and watch as it generates R code and your results, including graphics. Although it's named RTutor, the app can also generate Python code.
+
+RTutor is available on the web. It's currently the only app that doesn't require a ChatGPT API key to use, but you're asked to supply your own for heavy use so as not to bill the creators' account.
+
+The app's About page explains that RTutor's primary goal is "to help people with some R experience to learn R or be more productive ... RTutor can be used to quickly speed up the coding process using R. It gives you a draft code to test and refine. Be wary of bugs and errors."
+
+The code for RTutor is open source and available on GitHub, so you can install your own local version. However, licensing only allows using the app for nonprofit or non-commercial use, or for commercial testing. RTutor is a personal project of Dr. Steven Ge, a professor of bioinformatics at South Dakota State University. 
+
+##  Be aware!
+
+Everything related to AI and LLMs is rapidly changing. Be aware that what works now (and is free) may change in a few months.
+
+## What to submit to Moodle
+
+For this lesson, complete the exercises then **Knit to HTML** and upload the HTML file to the Moodle exercise folder.
+
+
+### Exercise 1 
+Complete the exercise section in this lesson (and show the prompt language you used).
+
+### Exercise 2 — Prompt for code, then verify
+Ask an AI tool to generate code for a different plot you want.
+Then **verify**:
+- the packages exist
+- the variable names exist
+- the plot matches what you requested
+
+Write 3–5 bullet points describing what you verified.
+
+#### answer
+```{r}
+head(CO2)
+```
+```{r}
+
+df2 <- CO2 %>%
+  mutate(Group = interaction(Type, Treatment, sep = " – "))
+
+# Violin plot for conc
+ggplot(df2, aes(x = Group, y = conc, fill = Group)) +
+  geom_violin(trim = FALSE) +
+  geom_jitter() + 
+  scale_fill_brewer(palette = "Set2") +
+  labs(x = "Type – Treatment", y = "Concentration") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+# Violin plot for uptake
+ggplot(df2, aes(x = Group, y = uptake, fill = Group)) +
+  geom_violin(trim = FALSE) +
+  geom_jitter() + 
+  scale_fill_brewer(palette = "Set2") +
+  labs(x = "Type – Treatment", y = "Uptake") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+
+
+
+Prompt:   
+"For each combination of type and treatment in CO2, create plot that shows the distributions of conc in one plot as different violin plots, and then do the same for uptake." 
+  
+And then I manually fixed the naming of the dataframe and added geom_jitter. I verified by running and inspecting the code, seeing no errors, and then indeed seeing that it plotted what I wanted.
+
+### Exercise 3 — “Explain the output” prompt
+Take the code from the plot in exercise 2 and ask an AI tool to interpret it, line by line.
+Then rewrite the interpretation in your own words and check for a mistake or a missing assumption.
+
+#### answer
+It says that it combines the two categorical variables into one and then visualizes their distribution with violin plots and jittered actual values. 
+
+
+### Exercise 4 — Troubleshooting prompt
+Take a real error message you encountered (or create one) and ask AI to help fix the error.
+Document what worked and what didn’t.
+
+#### answer
+The original code returned by RTutor used "df2 <- df bla bla" instead of CO2. I asked gemini how it would fix this and it said a lot about placeholder values and how you should check etc.
+
+**Self-check:** you include the original error, the fix, and a 1–2 sentence lesson learned.
+
+
+# Reproducibility checklist (do this before you submit)
+
+- Restart R (fresh session), then knit again from the top.
+- Make sure your code runs without manually “fixing things” in the console in between.
+- Include your session information at the end of the report so someone else can reproduce your setup.
+
+```{r session-info}
+sessionInfo()
+# If you have the sessioninfo package installed, this is even nicer:
+# sessioninfo::session_info()
+```
+
