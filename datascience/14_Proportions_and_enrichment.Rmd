@@ -361,7 +361,7 @@ Let's see if there is a significant difference in our new groups
 
 ```{r}
 # Perform fisher.test
-fisher_result <- fisher.test(contingency_table)
+fisher_result <- fisher.test(contingency_table) # just extend the contingency table for more values
 
 # Print the result
 print(fisher_result)
@@ -471,6 +471,35 @@ fisher.test(x = rbind(c(33, 14),
 ### Exercise 4 — Enrichment idea
 Run (or simulate) a simple enrichment-style test (hypergeometric framing is fine).
 Explain what “enriched” means in your context. (Typical use case gene set enrichment)
+
+#### 
+
+if necessary I can just do some DNA encoded library example where e.g. certain moieties are enriched after the experiment (or use gemini to generate the values for us). Note that sequences represent DNA barcodes attached to chemical building blocks.
+Prompt: simulate a small DNA encoded library experiment. Row 1: count of a few different sequences. Row2: count of sequences after the assay
+then calculate chi-square and fishers exact test
+```{r}
+# Create the contingency table
+# Each column is a sequence, Each row is a stage
+del_matrix <- matrix(c(250, 40,   # Seq_A
+                       260, 35,   # Seq_B
+                       240, 100,  # Seq_C
+                       250, 45),  # Seq_D
+                     nrow = 2, 
+                     dimnames = list(Stage = c("Input", "Assay"),
+                                     Sequence = c("Seq_A", "Seq_B", "Seq_C", "Seq_D")))
+
+# 1. Chi-Square Test
+chi_result <- chisq.test(del_matrix)
+
+# 2. Fisher's Exact Test 
+# (Note: For very large tables, simulate.p.value = TRUE may be needed)
+#fisher_result <- fisher.test(del_matrix, simulate.p.value = T)
+
+# View Results
+print(chi_result)
+#print(fisher_result)
+```
+
 
 **Self-check:** you define background vs selected set clearly.
 
