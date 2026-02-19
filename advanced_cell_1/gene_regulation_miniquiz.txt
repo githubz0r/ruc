@@ -1,0 +1,10 @@
+1. specificity is achieved by multiple transcription factors each with "weak" affinity acting synergistically to induce expression of a specific gene
+2. transcription factors can open chromatin by blocking histone-reattachment, recruiting HATs and chromatin remodelling complexes (SWI/SNF)
+3. The stripe 2 regulatory segment has binding sites for 4 transcription factors and is activated when giant/krüppel are absent but bicoid and/or hunchback are present
+4. it induces its own expression, either directly or via the expression of other transcription factors that activate its expression
+5. insert plasmids with ktf4, oct4 and sox2 that induce a pluripotent stem cell stage
+6. DNA methylation signals repression and is put on closed/heterochromatin
+7. DNA methylation can both repress and activate gene-expression depending on which sequence is methylated (e.g. methylation of insulator activates)
+8. The x chromosome is silenced by Xist which recruits various repressor proteins to close down and compact the x chromosome.
+9. CpG islands are regions of the chromosome that are actively expressed or important for organism function such that they aren't lost by mutation
+10. A cell memory is persistent state induced by molecular factors such as auto-expressing transcription factors or inherited chromatin and DNA modifications

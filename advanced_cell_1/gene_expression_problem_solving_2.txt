@@ -1,0 +1,8 @@
+positive feedback loop, draw the answer, it activates its own transcription
+the transcription factors activate their own expression and also different tfs that in turn can activate that same tf
+
+methylation of C induces closing of chromatin, enzymes recognize methylated CG nucleotides and methylate the reverse strand
+imprinting is caused by methylation
+
+VP1 binds ABRA-binding factor, it's a coactivator
+VP1 induces its own expression, binding to its own promoter or activating a transcription factor that activates its promoter

@@ -1,0 +1,8 @@
+1. RNA pol II makes mRNA
+2. TFIID which contains TBP (tata binding protein) binds to tata box
+3. specificity is achieved by multiple weak interactions of specific transcription factors with affinity for the promoter and enhancers and proteins bound to these, cooperative binding
+4. snRNPs bind to the sequences, base pairing by different U snRNAs, recruited by RNA pol II
+5. specificity is achieved through differential affinity for different splite sites
+6. RNA splicing takes place as RNA is being synthesized by RNA pol II and EJC are attached
+7. poly A tail attachment by PAP
+8. only correctly capped, and poly A'd mRNA with appropriate proteins attached get exported to cytoplasm, EJC, poly A binding proteins etc.
