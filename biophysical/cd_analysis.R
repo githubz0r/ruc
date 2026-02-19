@@ -29,7 +29,7 @@ acetate_clean %<>% mutate(mrt = mean_resid_theta(theta, conc_acetate))
 
 nap_acetate <- bind_rows(nap = nap_clean, acetate = acetate_clean, .id = 'buffer')
 
-nap_acetate %>% ggplot(aes(x=wavelength, y = theta, color = buffer))+geom_point()
+nap_acetate %>% ggplot(aes(x=wavelength, y = mrt, color = buffer))+geom_point()
 nap_acetate %>% ggplot(aes(x=wavelength, y = ht, color = buffer))+geom_point()
 
 helix_fraction_nap <- (nap_clean %>% filter(wavelength == 222) %>% pluck('mrt'))/(-33000)
