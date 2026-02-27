@@ -1,0 +1,19 @@
+1. we need to be able to transport nutrients and molecules, both down and up their electrochemical gradients to ensure we can absorb nutrients, water, and cell processes based on signalling + keep important gradients up for synthesis of ATP and transport etc.
+
+2. They work by granting a molecule to which the cell membrane is otherwise impermeable an opening to move through the membrane.
+
+3. Specificity is achieved by the specific orientation of the backbone and side chains in the channel opening, ensuring that specific electrostatic interactions such as e.g. number of hydrogen bonding partners preferentially allow some molecules to pass through and leave others out
+
+4. Most channels are closed to avoid messing with the established electrochemical potentials of ions
+
+5. Voltage, ligand, mechanical force
+
+6. Membrane transporters work by binding to their solute of choice and then doing a conformational flip that then allows the solute to pass through the other side. Channels open and allow free diffusion of ions.
+
+7. Gradient of electric and chemical potential
+
+8. ATP driven transport, co-transport with another molecule down its gradient and light or redox driven transport
+
+9. Three Na+ out two Ka in for each ATP hydrolysis
+
+10. 
