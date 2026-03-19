@@ -10,7 +10,7 @@ enzyme_conc = 0.1*10^-3 # mM
 data <- read_excel("/Users/b246357/Documents/uni/biophysical/ex8data.xlsx", skip=2) #%>% rename(time_s = time)
 data_g1 <- data %>% select(Time, matches("[A-G]{1}[2-3]{1}$"))
 data_g2 <- data %>% select(Time, matches("[A-G]{1}[7-9]{1}$"))
-data_g3 <- data %>% select(Time, matches("[A-G]{1}(9|10|11)\\b{1}$"))
+data_g3 <- data %>% select(Time, matches("[A-G]{1}(10|11|12)\\b{1}$"))
 data_g1 <- data_g1[1:7, ]
 data_g2 <- data_g2[1:7, ]
 data_g3 <- data_g3[1:7, ]
@@ -53,6 +53,7 @@ v_c_df %>% ggplot(aes(x=conc, y=velocity, colour=row.id))+geom_point()
 fit_nl <- nls(velocity ~ (Vmax * conc) / (Km + conc), 
            data = v_c_df, 
            start = list(Vmax = 10, Km = 50))
+
 
 # View the results
 summary(fit_nl)
