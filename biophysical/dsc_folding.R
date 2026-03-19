@@ -26,8 +26,6 @@ cp_fits <- baselines %>%
   map_dfr(tidy, .id = "dataset_name")
 cps <- c(barnase_n = 17.5, barnase_u = 25, ub_n = 10, barnase_u = 20)
 
-#excess_barnase <- (combined %>% filter(protein == 'barnase')  %>% pluck('cp_kj_Kmol')) - cps['barnase_n']
-#excess_ub <- (combined %>% filter(protein == 'ubiquitin')  %>% pluck('cp_kj_Kmol')) - cps['ub_n']
 
 combined %<>% mutate(excess_cp = ifelse(protein == 'barnase', cp_kj_Kmol - cps['barnase_n'], cp_kj_Kmol - cps['ub_n']))
 combined_long <- combined %>% pivot_longer(cols = c(cp_kj_Kmol, excess_cp), values_to = 'cp', names_to = 'cp_type') 
@@ -114,8 +112,8 @@ combined_long3 <- combined %>% pivot_longer(cols = c(corrected_cp, gaussian_fits
 combined_long3 %>% ggplot(aes(x=kelvin, y=corrected_cp, colour = cp_or_pred_cp))+geom_point()+geom_line()
   scale_x_continuous(n.breaks = 10)
 
-d_h_cal_barnase <- integrate(barnase_fitted, lower = 400, upper = 200)
-d_h_cal_ubiquitin <- integrate(ubiquitin_fitted, lower = 400, upper = 200)
+d_h_cal_barnase <- integrate(barnase_fitted, lower = 200, upper = 400)
+d_h_cal_ubiquitin <- integrate(ubiquitin_fitted, lower = 200, upper = 400)
 
 #tm_barnase <- combined %>% filter(protein == 'barnase') %>% filter(cp_kj_Kmol == max(cp_kj_Kmol)) %>% pluck('kelvin')
 #tm_ubiquitin <- combined %>% filter(protein == 'ubiquitin') %>% filter(cp_kj_Kmol == max(cp_kj_Kmol)) %>% pluck('kelvin') 
@@ -151,7 +149,7 @@ thermo_params <- function(kelvin, m_enthalpy, mt, d_cp){
   return(list(d_g = d_g, d_h = d_h, t_d_s = t_d_s))
 }
 
-kelvin_range <- 280:400
+kelvin_range <- 290:390
 barnase_thermos <- kelvin_range %>% 
   lapply(thermo_params, d_h_cal_barnase$value, mt_barnase, d_cp_barnase) %>% 
   bind_rows() %>% mutate(kelvin = kelvin_range)
@@ -162,10 +160,7 @@ ubiquitin_thermos <- kelvin_range %>%
 
 thermos_combined <- bind_rows(barnase = barnase_thermos, ubiquitin = ubiquitin_thermos, .id = 'protein')
 thermos_combined_long <- thermos_combined %>% pivot_longer(cols=c(d_g, d_h, t_d_s), values_to = 'thermval', names_to = 'thermparam')
-#combined_with_thermos <- bind_cols(combined, thermos_combined)
 
-#combined_with_thermos_long <- combined_with_thermos %>% 
-  #pivot_longer(cols=c(d_g, d_h, t_d_s), values_to = 'thermval', names_to = 'thermparam')
 
 # keep in mind this is delta G for the unfolded state
 thermos_combined_long %>% ggplot(aes(y=thermval, x = kelvin, col = thermparam, shape = protein)) + 
