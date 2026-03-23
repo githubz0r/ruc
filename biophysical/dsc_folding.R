@@ -28,11 +28,11 @@ cps <- c(barnase_n = 17.5, barnase_u = 25, ub_n = 10, barnase_u = 20)
 
 
 combined %<>% mutate(excess_cp = ifelse(protein == 'barnase', cp_kj_Kmol - cps['barnase_n'], cp_kj_Kmol - cps['ub_n']))
-combined_long <- combined %>% pivot_longer(cols = c(cp_kj_Kmol, excess_cp), values_to = 'cp', names_to = 'cp_type') 
+#combined_long <- combined %>% pivot_longer(cols = c(cp_kj_Kmol, excess_cp), values_to = 'cp', names_to = 'cp_type') 
 
-combined_long %>% ggplot(aes(x=kelvin, y=cp, colour = protein))+geom_point()+
-  scale_x_continuous(n.breaks = 10) + 
-  facet_grid(~cp_type)
+#combined_long %>% ggplot(aes(x=kelvin, y=cp, colour = protein))+geom_point()+
+#  scale_x_continuous(n.breaks = 10) + 
+#  facet_grid(~cp_type)
 
 
 # a: lower asymptote, d: upper asymptote, c: inflection point, b: hill slope
@@ -133,29 +133,37 @@ d_s_tm_ubiquitin <- d_h_cal_ubiquitin$value/ubiquitin_params['mu'] # -0.62 kj/mo
 
 # function corresponding to 27.28 in klostermeier
 enthalpy <- function(kelvin, m_enthalpy, mt, d_cp){
-  m_enthalpy + d_cp*(kelvin - mt)
+  d_h <- m_enthalpy + d_cp*(kelvin - mt)
+  return(d_h)
 }
 
 # 27.29 in klostermeier
 delta_g <- function(kelvin, m_enthalpy, mt, d_cp){
   d_g <- m_enthalpy * (1 - kelvin/mt) + d_cp * (kelvin - mt - kelvin * log(kelvin/mt))
+  return(d_g)
   #min_t_s <- d_g - enthalpy(kelvin, m_enthalpy, mt, d_cp)
 }
 
-thermo_params <- function(kelvin, m_enthalpy, mt, d_cp){
+entropy <- function(kelvin, m_entropy, mt, d_cp){
+  d.s <- m_entropy + d_cp*(log(kelvin/mt))
+  return(d.s)
+}
+thermo_params <- function(kelvin, m_enthalpy, m_entropy, mt, d_cp){
   d_g <- delta_g(kelvin, m_enthalpy, mt, d_cp)
   d_h <- enthalpy(kelvin, m_enthalpy, mt, d_cp)
   t_d_s <- -(d_g - d_h)
-  return(list(d_g = d_g, d_h = d_h, t_d_s = t_d_s))
+  d_s2 <- entropy(kelvin, m_entropy, mt, d_cp)
+  d_g2 <- d_h - kelvin*d_s2
+  return(list(d_g = d_g, d_h = d_h, t_d_s = t_d_s, t_d_s2 = kelvin*d_s2, d_g2 = d_g2))
 }
 
 kelvin_range <- 290:390
 barnase_thermos <- kelvin_range %>% 
-  lapply(thermo_params, d_h_cal_barnase$value, mt_barnase, d_cp_barnase) %>% 
+  lapply(thermo_params, d_h_cal_barnase$value, d_s_tm_barnase, mt_barnase, d_cp_barnase) %>% 
   bind_rows() %>% mutate(kelvin = kelvin_range)
 
 ubiquitin_thermos <- kelvin_range %>% 
-  lapply(thermo_params, d_h_cal_ubiquitin$value, mt_ubiquitin, d_cp_ubiquitin) %>% 
+  lapply(thermo_params, d_h_cal_ubiquitin$value, d_s_tm_ubiquitin, mt_ubiquitin, d_cp_ubiquitin) %>% 
   bind_rows() %>% mutate(kelvin = kelvin_range)
 
 thermos_combined <- bind_rows(barnase = barnase_thermos, ubiquitin = ubiquitin_thermos, .id = 'protein')
@@ -170,4 +178,95 @@ thermos_combined %>% ggplot(aes(x=kelvin, y=d_g, colour=protein))+geom_point()
 
 ### van't hoff analysis
 # loop over temperature values and integrate
+fu_t <- function(kelvin, gaussian_function, full.integral, lower = 200){
+  integral <- integrate(gaussian_function, lower = lower, upper = kelvin) %>% pluck('value')
+  f.u <- integral/full.integral
+  return(f.u)
+  #Ku <- f.u/(1-f.u)
+}
+
+barnase_fu_t <- combined %>% filter(protein == 'barnase') %>% pluck('kelvin') %>% 
+  sapply(fu_t, barnase_fitted, d_h_cal_barnase$value)
+
+ubiquitin_fu_t <- combined %>% filter(protein == 'ubiquitin') %>% pluck('kelvin') %>% 
+  sapply(fu_t, ubiquitin_fitted, d_h_cal_ubiquitin$value)
+
+combined %<>% mutate(f_u = c(barnase_fu_t, ubiquitin_fu_t))
+
+combined %>% ggplot(aes(x=kelvin, y=f_u, colour=protein)) + geom_point()
+combined <- combined %>%
+  group_by(protein) %>%
+  mutate(relative_kelvin = kelvin - min(kelvin, na.rm = TRUE)) %>%
+  ungroup()
+
+combined %<>% mutate(ln_ku = log(f_u/(1-f_u)))
+combined_no_nan <- combined %>% filter(!is.na(ln_ku)) %>% mutate(inv_kelvin = 1/kelvin) # a few values became nan by the transformation
+combined_no_nan %<>% filter(!(protein == "barnase" & kelvin > 330)) # some values mess with the fit because of floating point imprecision
+
+#combined_no_nan %<>% filter(inv_kelvin > 0.00275 & inv_kelvin < 0.003)
+
+vant_hoff_barnase <- lm(ln_ku ~ inv_kelvin, data = combined_no_nan %>% filter(protein == 'barnase'))
+vant_hoff_barnase_entropy <- coef(vant_hoff_barnase)['(Intercept)'] * 8.314 * 10^-3
+vant_hoff_barnase_enthalpy <- -coef(vant_hoff_barnase)['inv_kelvin'] * 8.314 * 10^-3
+pred_vant_hoff_barnase <- predict(vant_hoff_barnase)
+vant_hoff_ubiquitin <- lm(ln_ku ~ inv_kelvin, data = combined_no_nan %>% filter(protein == 'ubiquitin'))
+vant_hoff_ubiquitin_entropy <- coef(vant_hoff_ubiquitin)['(Intercept)'] * 8.314 * 10^-3
+vant_hoff_ubiquitin_enthalpy <- -coef(vant_hoff_ubiquitin)['inv_kelvin'] *8.314 * 10^-3
+pred_vant_hoff_ubiquitin <- predict(vant_hoff_ubiquitin)
+combined_no_nan %<>% mutate(pred_vant_hoff = c(pred_vant_hoff_barnase, pred_vant_hoff_ubiquitin))
+
+combined_no_nan_long <- combined_no_nan %>% pivot_longer(cols = c(ln_ku, pred_vant_hoff), values_to = "lnK", names_to = "emp_or_calc")
+
+combined_no_nan_long %>% ggplot(aes(x=inv_kelvin, y = lnK, fill = protein, colour = emp_or_calc, shape = emp_or_calc))+
+  geom_point() + 
+  scale_shape_manual(values = c(21, 22)) +
+  guides(
+    fill = guide_legend(
+      override.aes = list(
+        shape = 21,    # Use a simple circle for the protein legend
+        color = NA,    # REMOVE the black border so the fill is visible
+        stroke = 0     # Set border thickness to zero
+      )
+    ),
+    color = guide_legend(
+      override.aes = list(
+        fill = "white" # Set a neutral background for the 'type' shapes
+      )
+    ),
+    shape = guide_legend() # Keep this linked to color to merge them
+  ) +
+  theme_minimal() + 
+  labs(title = "vant hoff",
+       fill = "Protein Name",
+       color = "Measurement Type",
+       shape = "Measurement Type")
+# try nonlinear instead
+
+# vant_hoff_exp_function <- function(kelvin, enthalpy, entropy){
+#   K <- exp(-enthalpy/(kelvin*8.314) + entropy/8.314)
+#   return(K)
+# }
+# 
+# combined %<>% mutate(ku = f_u/(1-f_u))
+# barnase_vant_hoff_exp <- nls(ku ~ vant_hoff_exp_function(kelvin, enthalpy, entropy), 
+#                         data = combined %>% filter(protein == 'barnase'),
+#                         start = list(enthalpy = 262,
+#                                      entropy = 1.1))
+
+## barnase
+# barnase variables dsc
+barnase_thermos_298 <- thermos_combined %>% filter(protein == 'barnase' & kelvin == 298) %>% mutate(d_s = t_d_s/298)
+print(barnase_thermos_298)
+# barnase variables vant hoff
+print(vant_hoff_barnase_enthalpy %>% unname()) 
+print(vant_hoff_barnase_entropy %>% unname())
+print((vant_hoff_barnase_enthalpy - 298*vant_hoff_barnase_entropy) %>% unname())
+
+
+# ubiquitin variables vant hoff
+ubiquitin_thermos_298 <- thermos_combined %>% filter(protein == 'ubiquitin' & kelvin == 298) %>% mutate(d_s = t_d_s/298)
+print(ubiquitin_thermos_298)
+print(vant_hoff_ubiquitin_enthalpy %>% unname()) 
+print(vant_hoff_ubiquitin_entropy %>% unname())
+print((vant_hoff_ubiquitin_enthalpy - 298*vant_hoff_ubiquitin_entropy) %>% unname())
   
