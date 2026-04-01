@@ -1,0 +1,163 @@
+--------------------
+FILE: er_miniquiz_answers.txt
+--------------------
+1. ER membrane, mitochondrial membrane, golgi
+2. Phase separated blob of proteins and/or nucleic acids driven by weak interactions that sequester certain particles
+3. Ribosomes associated with rough ER, or possibly in the cytosol and then transported to ER
+4. Rough and smooth ER are separated by centrifugation in fructose gradient
+5. Attaching signals -> it goes where signal tells it to go; abolish signal -> it stays in cytosol
+6. binds to the signal peptide and attaches to SRP receptor. This receptor brings the growing peptide in halted ribosome in contact with sec61
+7. It is translocated through the membrane by sec61 and BiP
+8. proteins can be transported to ER after synthesis in cytosol
+9. Protein import into ER requires ATP hydrolyzed by BiP
+10. bacteria only have the plasma membranes and must pull the correct side out from the outside
+11. Several signal peptides and then after each signal the part exits from Sec61
+12. the get proteins solve this problem by attaching the c terminal domain's signal peptide in the membrane.
+13. Reduce and re-oxidize disulfide bridges in case of wrong bridge formation
+14. glycophosphatidylinositole anchor -> glycan anchored to phospholipid covalently attached to C terminal of protein through phosphoethanolamine, note this is on ER side
+15. protein glycosylation is gradually removed and use to check for correct folding
+16. Misfolded proteins will bind to receptors that then activate gene expression for increased chaperone expression by splicing the intron of a specific gene that is then translated in the cytosol and goes into the nucleus, note there are also mechanisms involving inactivation of translation initiating factor and maybe increase proteolysis or something
+17. Phospholipids are synthesized in the ER membrane by cytosolic enzymes
+18. Fatty acid CoA is an intermediate
+19. Membranes are passed through channels formed by some weird proteins
+-e 
+
+--------------------
+FILE: gene_expression_problem_solving_2.txt
+--------------------
+positive feedback loop, draw the answer, it activates its own transcription
+the transcription factors activate their own expression and also different tfs that in turn can activate that same tf
+
+methylation of C induces closing of chromatin, enzymes recognize methylated CG nucleotides and methylate the reverse strand
+imprinting is caused by methylation
+
+VP1 binds ABRA-binding factor, it's a coactivator
+VP1 induces its own expression, binding to its own promoter or activating a transcription factor that activates its promoter
+-e 
+
+--------------------
+FILE: gene_regulation_miniquiz.txt
+--------------------
+1. specificity is achieved by multiple transcription factors each with "weak" affinity acting synergistically to induce expression of a specific gene
+2. transcription factors can open chromatin by blocking histone-reattachment, recruiting HATs and chromatin remodelling complexes (SWI/SNF)
+3. The stripe 2 regulatory segment has binding sites for 4 transcription factors and is activated when giant/krüppel are absent but bicoid and/or hunchback are present
+4. it induces its own expression, either directly or via the expression of other transcription factors that activate its expression
+5. insert plasmids with ktf4, oct4 and sox2 that induce a pluripotent stem cell stage
+6. DNA methylation signals repression and is put on closed/heterochromatin
+7. DNA methylation can both repress and activate gene-expression depending on which sequence is methylated (e.g. methylation of insulator activates)
+8. The x chromosome is silenced by Xist which recruits various repressor proteins to close down and compact the x chromosome.
+9. CpG islands are regions of the chromosome that are actively expressed or important for organism function such that they aren't lost by mutation
+10. A cell memory is persistent state induced by molecular factors such as auto-expressing transcription factors or inherited chromatin and DNA modifications
+-e 
+
+--------------------
+FILE: lecture_10_endocytosis_answers.txt
+--------------------
+1. proteins are transported from vesicles budding off transgolgi to plasma membrane/other compartments using clathrin coated vesicles, vesicles for later secretion
+2. Lysosomal acid hydrolases are modified with a terminal M6P (mannose 6-phosphate) on a glycan that then binds to a M6P receptor, this receptor with its cargo is then ferried to early endosomes that mature to late endosomes -> lysosomes
+3. Small vesicles not containing cargobound receptors bud off from vesicles and go back to the golgi
+4. Phagocytosis is mediated by receptor binding to a substrate, actin chains then cause the membrane to fold around the substrate which is then taken in encapsulated in a membrane
+5. a section of the membrane with a high concentration of receptors is taken in through pinocytosis
+6. A section of the membrane is taken in mediated by clathrin coated vesicles and dynamin proteins
+7. A damaged organelle is engulfed in a double membrane in an autophagosome. The outer membran e then fuses with a lysosome and degraded
+8. A large section of extracellular fluid is engulfed, again mediated by invaginations caused by the movement of actin filaments
+9. Proteins/organelles are degraded in lysosomes
+10. The pH of lysosomes is kept low through the action of ATP driven H+ pumps
+11. phosphatidylinositols recruit adaptor proteins that couple endocytosis signals to the receptors
+12. 
+-e 
+
+--------------------
+FILE: lecture_8_golgi_miniquiz_answers.txt
+--------------------
+1. Secreted proteins go through the ER to the golgi via COPII and then from golgi to cytosol
+2. Proteins mistakenly transported get transported back by receptors that recognize ER specific signal sequences and then get sent back via COPI vesicles
+3. COPII bends the membrane and helps bud off vesicles designated from ER to golgi
+4. The key molecules are the phosphatidylinositols that are phosphorylated on different parts and then recruit different adaptor molecules
+5. Cargo receptors bind to signal peptide sequences for proteins designated for specific organelles and then adaptor proteins bind these cargo receptors to the coating proteins for vesicle budding
+6. Membrane bending takes place when a coating protein (clathrin, COPII, COPI) binds to adaptor proteins and bends the membrane, the budding then takes place when a dynamin squeezes off the last membrane
+7. G proteins in vesicle formation help recruit specific adaptor proteins to the membrane that then recruit COPII
+8. GTP-Rab binds rab effector in the right destination and helps the vesicles dock so snare proteins can bind.
+Rab-GDP floating in cytosol binds a GEF on the vesicle membrane. Rab-GTP binds to membrane and phosphorylates PI to PIP and these then recruit Rab effectors
+9. The vesicle coating is lost after budding
+10.
+11. Snare complex favored need energy to hydrolyze them
+12. Proteins are modified in golgi, glycosylation etc. cleavage, sorted
+-e 
+
+--------------------
+FILE: mrna_miniquiz_answers.txt
+--------------------
+1. RNA pol II makes mRNA
+2. TFIID which contains TBP (tata binding protein) binds to tata box
+3. specificity is achieved by multiple weak interactions of specific transcription factors with affinity for the promoter and enhancers and proteins bound to these, cooperative binding
+4. snRNPs bind to the sequences, base pairing by different U snRNAs, recruited by RNA pol II
+5. specificity is achieved through differential affinity for different splite sites
+6. RNA splicing takes place as RNA is being synthesized by RNA pol II and EJC are attached
+7. poly A tail attachment by PAP
+8. only correctly capped, and poly A'd mRNA with appropriate proteins attached get exported to cytoplasm, EJC, poly A binding proteins etc.
+-e 
+
+--------------------
+FILE: problems_lectures_6_7.txt
+--------------------
+1. a) Na: cyt: 5-15 mM, out: 145
+      K+: cyt: 140, out: 5
+      Cl-: cyt: 5-15, out: 110
+      Ca2+ cyt: 10^-4 mM, out: 1-2mM
+      H+: cyt: pH 7.2, out pH 7.4
+   b) ion channels selective permeability to ions, gated except K+ leak?, active transport by e.g. NaK pump keep gradients up
+   c) Depolarization with Na+ for action potential
+
+2. Proteins like Na/K+ pump transports three na out for 2 ka in at the cost of 1 atp, producing ion gradients of both these. Cl and other ions have other transporters.
+
+3. co-transport powered glucose transporters can transport glucose against its concentration gradient
+
+4. ABC transporters are dimers that use the hydrolysis of two ATP to transfer molecules across the membrane
+
+5. small molecules especially nonpolar like gases can diffuse across the membrane, but bigger especially charged/polar molecules would require extensive breakage of hydrogen bonds etc. which would be unfavorable and thus need transporters. Especially larger charged molecules.
+
+6. Glucose/Mannose moieties on attached glycans are gradually removed if the protein doesn't fold and then when they're gone the protein is killed
+
+7. They activate the unfolded protein response. This response works by certain proteins recognizing the exposed hydrophobic areas of unfolded proteins and when this happens they can activate the splicing of an mRNA of a signal protein that then goes into the nucleus to activate expression of chaperones
+
+8. 1. Six
+   2. Insertion of signal peptide, then it exits after horizontally into the membrane and so on for each signal peptide.
+
+9. Insulin mRNA is transported from nucleus to cytosol and attached to ribosome. Ribosome stalls at signal peptide sequence and is transported to sec61 by SRP. Insulin is attached to Sec61 through the signal peptide, then transported across into the ER.
+b. Many things but: disulfide isomerization happens in ER. Cleave of pro-peptide in golgi?
+-e 
+
+--------------------
+FILE: transcription_problem_solving_1.txt
+--------------------
+a) opening chromatin complex, recruiting other transcription factors and recruiting HATs and chromatin remodelling complexes
+b) multiple weak interactions between multiple tfs
+c) 3*10^9 / 4^8
+d) more specificity is needed, achieved through multiple interactions
+-e 
+
+--------------------
+FILE: transporters_miniquiz_answers.txt
+--------------------
+1. we need to be able to transport nutrients and molecules, both down and up their electrochemical gradients to ensure we can absorb nutrients, water, and cell processes based on signalling + keep important gradients up for synthesis of ATP and transport etc.
+
+2. They work by granting a molecule to which the cell membrane is otherwise impermeable an opening to move through the membrane.
+
+3. Specificity is achieved by the specific orientation of the backbone and side chains in the channel opening, ensuring that specific electrostatic interactions such as e.g. number of hydrogen bonding partners preferentially allow some molecules to pass through and leave others out
+
+4. Most channels are closed to avoid messing with the established electrochemical potentials of ions
+
+5. Voltage, ligand, mechanical force
+
+6. Membrane transporters work by binding to their solute of choice and then doing a conformational flip that then allows the solute to pass through the other side. Channels open and allow free diffusion of ions.
+
+7. Gradient of electric and chemical potential
+
+8. ATP driven transport, co-transport with another molecule down its gradient and light or redox driven transport
+
+9. Three Na+ out two Ka in for each ATP hydrolysis
+
+10. 
+-e 
+
