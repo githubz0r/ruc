@@ -1,0 +1,973 @@
+[common]
+Program=Beckman Coulter Multisizer
+ftype= 300  Multisizer
+multtype= 113
+SavePC=Pre-release 3.33.15  18 Jun 2001 12:25
+Filename=Ovp#m3.#m3
+Pathname=C:\MS\Demodata\Ovp#m3.#m3
+Import=
+Saved= 990752427  21:00:27  24 May 2001
+ReSaved= 993240408  16:06:48  22 Jun 2001
+SavedTZ= 240,Eastern Daylight Time
+ReSavedTZ= 240,Eastern Daylight Time
+Comment1=
+Operator=
+BarCode=
+RunNum= 3
+File0=Overlap2#M3.#M3
+File1=Overlap1#M3.#M3
+[#Saves]
+ 993240408  16:06  22 Jun 2001
+ 0  
+[#SaveFlags]
+ 2
+ 0
+[Save0]
+Pathname=
+Time= 975619066  16:17:46  30 Nov 2000
+TZ= 360,Central Standard Time
+Flags= 2
+LoginName=
+RealName=
+ID=
+a= 0
+b= 0
+c= 0
+User=
+Computer=
+WinVer=
+DosVer=
+Comment=
+[Save1]
+Pathname=C:\MS\DEMO\Overlap2#M3.#M3
+Time= 990751060  20:37:40  24 May 2001
+TZ= 240,Eastern Daylight Time
+Flags= 131136
+LoginName=
+RealName=
+ID=
+a= 4
+b= 0
+c= 4
+User=lobeia
+Computer=78FRTNL
+WinVer=4.10
+DosVer=192.0
+Comment=
+[Save2]
+Pathname=C:\MS\DEMO\OVP#M3.#M3
+Time= 990752427  21:00:27  24 May 2001
+TZ= 240,Eastern Daylight Time
+Flags= 32768
+LoginName=
+RealName=
+ID=
+a= 4
+b= 0
+c= 13
+User=lobeia
+Computer=78FRTNL
+WinVer=4.10
+DosVer=192.0
+Comment=
+[Save3]
+Pathname=C:\MS\Demodata\Ovp#m3.#m3
+Time= 993240408  16:06:48  22 Jun 2001
+TZ= 240,Eastern Daylight Time
+Flags= 2
+LoginName=
+RealName=
+ID=
+a= 4
+b= 0
+c= 13
+User=lobeia
+Computer=78FRTNL
+WinVer=4.10
+DosVer=192.0
+Comment=
+[sample]
+GroupID=Overlap 12
+SampleID=
+Shape= 0
+[instrument]
+nBins= 256
+nTrend= 0
+nPulses= 0
+nPConv= 15620
+nAdded= 0
+PBins= 256
+PGeo= 1
+PVol= 0
+PMinDiam= 0.51423
+PMaxDiam= 24.1451
+PUnits= 4204
+PMnWd= 24
+PMxWd= 49
+PMnRt= 0
+PMxRt= 10
+PMnGn= 0
+PMxGn= 7
+PSmr= 1
+PEdit= 0
+PCCorr= 1
+PM2Edit= 0
+NoiseEdit= 0
+WidthEdit= 0
+Bigs= 0
+Smalls= 10509
+Goods= 5111
+oSpace= 0
+Serial=AD27081
+StartTime= 0  
+StartTZ= 360,Central Standard Time
+Electro=
+Disperse=
+AcqVersion=Preliminary 3.02.24  15 Nov 2000 12:12
+CPVersion=Pre-release 3.33.08  16 May 2001 11:04
+Var1= 0
+Var2= 0
+Current= -1600
+Resistance= 49.9
+VperA= 49900
+CperV= 838861
+Aperture= 100
+OrfLen= 0
+Gain= 2
+SumNoise= 0
+nNoise= 0
+MaxHtCorr= -179
+WdthErrs= 0
+MassC= 0
+Kd= 127.85
+DilF= 0
+UseDilF= 0
+SizeStd= 0
+SizeStdU= 0
+Edit= 0
+Control= 2
+Time= 60
+Count= 1000
+Day= 0
+Month= 0
+Year= 0
+FSample= 0
+Fleft= 0
+Fright= 0
+NSample= 0
+Nleft= 0
+Nright= 0
+WSample= 0
+Wleft= 0
+Wright= 0
+M3leftum= 0.51423
+M3rightum= 24.1451
+M3Cursors= 0
+M3Selected= 0
+Cal= 0
+bct= 0
+ASetup= 0
+Blank= 0
+CurGain= 0
+Polarity= 0
+TotCount= 30000
+AScale= 0
+CoinCorr= 0
+RawCount= -1
+MinRaw= 0
+MaxRaw= 0
+CCCount= 15763
+MinCC= 0
+MaxCC= 0
+MinSig= 0
+MaxSig= 0
+MinKd= 0
+AvgKd= 0
+MaxKd= 0
+SampleVol= 0
+ElectroVol= 0
+AnalyticVol= 0
+ManoVol= 500
+rDensity= 0
+sDensity= 0
+TimeSec= 60
+logscale= 0
+Extrap= 0
+Page= 0
+Full= 0
+Narrow= 0
+Edited= 0
+IsControl= 0
+ControlTm= 0  
+CalTm= 0  
+CalDiam= 0
+EndTm= 975619061  16:17:41  30 Nov 2000
+Pauses= 0
+Resumes= 0
+Conts= 0
+RSFile=
+RSMod= 0
+PrefFile=
+PrefMod= 0
+SOPFile=
+SOPComment=
+CurRun= 0
+NumRuns= 0
+Aper0= 100,0,0,0,0,0,0
+Aper1= 20,3.12431,3.63123,120,130,1.00327,3.74914
+[SampleStats]
+Mean= 0, 0, 0
+Median= 0, 0, 0
+Mode= 0, 0, 0
+SD= 0, 0, 0
+CV= 0, 0, 0
+[M3Info]
+RState= 12
+ApDiam= 100
+ApSerial= 0
+MaxCellVol= 0
+ApComm= 
+Kd= 127.85
+Threshum= 1.999
+NoiseThum= 0.3148
+NoiseTm= 0
+CntLvlum= 1.999
+MrkSpLum= 1.603
+ZMrkSpLum= 1.999
+Current= 1600
+MeaCur= 10
+PrGain= 1
+Pol= 1
+Thresh= 1740
+StSpd= 0
+TmBs= 500
+CType= 1
+TimeSec= 60
+Volume= 500
+ChCount= 1000
+TCount= 30000
+AnVol= 0
+MinWd= 25
+MaxWd= 32000
+CntLvl= 1740
+MrkSpL= 1244
+TPkEnable= 0
+TPkRng= 0
+TPkHt= 65535
+RnBEmp= 20
+StrtMode= 0
+MxStrtDly= 0
+StrtDly= 0
+TPkPAN= 1
+PnEn= 1
+PrEn= 1
+PPMEn= 1
+SetPr= 11758
+PPCoef= 200
+ICoef= 0
+ILim= 999999
+RstV= 0
+InPmpSpd= -30000
+OutPmpSpd= 10000
+BagPr= 11758
+Count= 15620
+CCCount= 15763
+ZCount= 43487
+ZCCCount= 43886
+Noise= 0
+Pressure= 12690
+StirSpd= 0
+StrtTm= 757495047
+TDBytes= 218680
+MCLo= 3.26794e+006
+SCLo= 3.56014e+008
+Conc= 0
+NrPC= 1038
+WdPC= 0
+CurOfst= 33294
+GnStage= 0
+PmpTh= 0
+PmpC1= 0
+PmpC2= 0
+PmpD= 0
+VperA= 49900
+CperV= 838861
+VacPr= 11746
+Of4096= 751
+Of1024= 730
+Of256= 749
+Of64= 735
+Of16= 723
+Of4= 744
+Of1= 736
+Of025= 723
+PPos= 0
+CalPer= 60
+CalTemp= 2
+TPkW= 30
+TPkRt= 3000
+RegPos= 0
+RegPer= 10
+SPPsia= 712
+SampkHz= 6000
+SProg= 0
+MxHC= -179
+MxSS= 100
+BgPFull= 48
+BgSVol= 546
+CalSz= 1949
+BgTop= 1522
+BgBot= 1240
+ELive= 0
+DrSnsErr= 0
+DbgEn= 0
+LastCC= 1001
+ApLen= 0
+ApSerNo= 0
+MainTemp= 31
+AnaTemp= 41
+F1St= 0
+F2St= 1
+LmpSt= 1
+StirSt= 1
+PlatUp= 1
+DrClsd= 1
+Spl1= 0
+Spl2= 0
+DilJrPr= 1
+DilJrLvl= 0
+WstJrPr= 1
+WstJrLvl= 0
+MPHome= 1
+MPAway= 0
+A5V= 5045
+AM5v= -5050
+A15V= 14685
+AM15V= -15043
+D5V= 4961
+D24V= 24009
+LampV= 11533
+A0V= -15
+CurEn= 1
+AutAdj= 0
+SSCorr= -514
+VacPmpSt= 1
+V1= 1
+V2= 0
+V3= 0
+V4= 0
+V5= 0
+V6= 1
+V7= 1
+V8= 0
+V9= 0
+CurSwSt= 1
+MPP= 0
+MdHtTh= 20000
+Rev=1.02
+BldTm=15:25:23
+BldDt=May 25 2000
+ERunTm= 60000
+NoiThrsh= 4
+Vr2= 0
+Vr3= 0
+PltSenEn= 1
+DrSenEn= 1
+SSEn1= 1
+SSEn2= 1
+DJrEn= 1
+WJrEn= 1
+DiStBk= 500
+StpCkDly= 20
+RnTCode= 0
+Flow= 0
+HwConf= 0
+FPGA= 5
+StAddr= 165
+MinFlw= 14400
+MaxFlw= 48000
+MaxEngy= 2560
+TotSTm= 3000
+PFlSTm= 0
+FillTm= 12000
+FlshTm= 5000
+DrainTm= 18000
+SerNo=AD27081
+MtrPrg= 0
+RnsSBE= 12
+TmBOMsrd= 3124230
+PrssTol= 97
+MaxApR= 100000
+ChkSmplLvlCur= 500
+ChkSmplLvlEn= 0
+RMsrCur= 500
+ChkCurEn= 0
+MaxSupV= 150
+DTPct= 0
+DTPctEn= 0
+DTRnsEn= 0
+OffsetsEn= 0
+spare3= 0
+ZCount= 0
+ZMarks= 0
+ZSpaces= 0
+ZLevel= 0
+MinHt= 600
+ZMinHt= 600
+WidthSF= 0
+NMMax= 0
+NMMean= 0
+NMSD= 0
+NMORC= 0
+NMCount= 0
+Save= 1
+SavePulses= 0
+Print= 0
+Export= 0
+NumRuns= 2
+Wait= 0
+AutoFlush= 0
+Electro=
+Disperse=
+LastCert= 0  
+NextCert= 0  
+LastReminderTm= 0  
+LastReminderDays= 0
+ReminderCnt= 0
+LastReminderID= 0
+[#Extra]
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+ 0
+[#Bindiam]
+ 0.51423
+ 0.52202
+ 0.529929
+ 0.537957
+ 0.546107
+ 0.55438
+ 0.562778
+ 0.571304
+ 0.579959
+ 0.588745
+ 0.597664
+ 0.606718
+ 0.61591
+ 0.625241
+ 0.634713
+ 0.644328
+ 0.654089
+ 0.663998
+ 0.674058
+ 0.684269
+ 0.694635
+ 0.705159
+ 0.715841
+ 0.726686
+ 0.737695
+ 0.748871
+ 0.760216
+ 0.771732
+ 0.783424
+ 0.795292
+ 0.80734
+ 0.819571
+ 0.831987
+ 0.844591
+ 0.857386
+ 0.870375
+ 0.883561
+ 0.896946
+ 0.910534
+ 0.924328
+ 0.938331
+ 0.952547
+ 0.966977
+ 0.981626
+ 0.996497
+ 1.01159
+ 1.02692
+ 1.04248
+ 1.05827
+ 1.0743
+ 1.09058
+ 1.1071
+ 1.12387
+ 1.1409
+ 1.15818
+ 1.17572
+ 1.19354
+ 1.21162
+ 1.22997
+ 1.24861
+ 1.26752
+ 1.28672
+ 1.30622
+ 1.32601
+ 1.34609
+ 1.36649
+ 1.38719
+ 1.4082
+ 1.42954
+ 1.45119
+ 1.47318
+ 1.4955
+ 1.51815
+ 1.54115
+ 1.5645
+ 1.5882
+ 1.61226
+ 1.63668
+ 1.66148
+ 1.68665
+ 1.7122
+ 1.73814
+ 1.76447
+ 1.7912
+ 1.81834
+ 1.84589
+ 1.87385
+ 1.90224
+ 1.93105
+ 1.96031
+ 1.99001
+ 2.02015
+ 2.05076
+ 2.08183
+ 2.11336
+ 2.14538
+ 2.17788
+ 2.21088
+ 2.24437
+ 2.27837
+ 2.31289
+ 2.34792
+ 2.38349
+ 2.4196
+ 2.45626
+ 2.49347
+ 2.53124
+ 2.56959
+ 2.60852
+ 2.64804
+ 2.68815
+ 2.72888
+ 2.77022
+ 2.81218
+ 2.85479
+ 2.89804
+ 2.94194
+ 2.98651
+ 3.03175
+ 3.07768
+ 3.12431
+ 3.17164
+ 3.21969
+ 3.26846
+ 3.31798
+ 3.36824
+ 3.41927
+ 3.47107
+ 3.52365
+ 3.57704
+ 3.63123
+ 3.68624
+ 3.74208
+ 3.79877
+ 3.85632
+ 3.91474
+ 3.97405
+ 4.03425
+ 4.09537
+ 4.15741
+ 4.22039
+ 4.28433
+ 4.34923
+ 4.41512
+ 4.48201
+ 4.54991
+ 4.61884
+ 4.68881
+ 4.75984
+ 4.83195
+ 4.90515
+ 4.97946
+ 5.0549
+ 5.13148
+ 5.20922
+ 5.28813
+ 5.36824
+ 5.44957
+ 5.53213
+ 5.61594
+ 5.70101
+ 5.78738
+ 5.87506
+ 5.96406
+ 6.05441
+ 6.14613
+ 6.23924
+ 6.33376
+ 6.42972
+ 6.52712
+ 6.62601
+ 6.72639
+ 6.82829
+ 6.93173
+ 7.03674
+ 7.14335
+ 7.25156
+ 7.36142
+ 7.47294
+ 7.58615
+ 7.70108
+ 7.81774
+ 7.93618
+ 8.05641
+ 8.17846
+ 8.30236
+ 8.42813
+ 8.55581
+ 8.68543
+ 8.81701
+ 8.95058
+ 9.08618
+ 9.22383
+ 9.36356
+ 9.50541
+ 9.64942
+ 9.7956
+ 9.944
+ 10.0946
+ 10.2476
+ 10.4028
+ 10.5604
+ 10.7204
+ 10.8828
+ 11.0477
+ 11.215
+ 11.3849
+ 11.5574
+ 11.7325
+ 11.9102
+ 12.0907
+ 12.2738
+ 12.4598
+ 12.6485
+ 12.8402
+ 13.0347
+ 13.2321
+ 13.4326
+ 13.6361
+ 13.8427
+ 14.0524
+ 14.2653
+ 14.4814
+ 14.7008
+ 14.9235
+ 15.1496
+ 15.3791
+ 15.612
+ 15.8486
+ 16.0887
+ 16.3324
+ 16.5798
+ 16.831
+ 17.086
+ 17.3448
+ 17.6076
+ 17.8743
+ 18.1451
+ 18.42
+ 18.6991
+ 18.9823
+ 19.2699
+ 19.5618
+ 19.8582
+ 20.159
+ 20.4644
+ 20.7744
+ 21.0892
+ 21.4086
+ 21.733
+ 22.0622
+ 22.3965
+ 22.7357
+ 23.0802
+ 23.4298
+ 23.7848
+ 24.1451
+[Binunits]
+Units=1, 0, 0, 0
+[#Binheight]
+ 344.119
+ 842.26
+ 2388.02
+ 2943.05
+ 3706.21
+ 7126.58
+ 10734.2
+ 13793.8
+ 18936
+ 24903.8
+ 32672.4
+ 44513.2
+ 59564.2
+ 74633.9
+ 94567
+ 116107
+ 142446
+ 181605
+ 210392
+ 255918
+ 295105
+ 327864
+ 375384
+ 394435
+ 426910
+ 448217
+ 467735
+ 471301
+ 492517
+ 516456
+ 486081
+ 482225
+ 472756
+ 463314
+ 444190
+ 413110
+ 378613
+ 351444
+ 320113
+ 298421
+ 272448
+ 251192
+ 226568
+ 206480
+ 188178
+ 168907
+ 150281
+ 129981
+ 116600
+ 98515.1
+ 84050.8
+ 73615.2
+ 61089.6
+ 52547
+ 45042.3
+ 37983.5
+ 31005.5
+ 26213.1
+ 23634.5
+ 21253.5
+ 18027.5
+ 15173.5
+ 12938.4
+ 10062.8
+ 9527.05
+ 8318.14
+ 6498.25
+ 6372.47
+ 6665.69
+ 5076.84
+ 5304.86
+ 4775.64
+ 4395.36
+ 4256.56
+ 3717.1
+ 2732.38
+ 3376.24
+ 2740.69
+ 2735.99
+ 2706.75
+ 2169.8
+ 3127.27
+ 2103.29
+ 1611.8
+ 1831.75
+ 1661.37
+ 1390.5
+ 1951.35
+ 1658.67
+ 1645.93
+ 1215.07
+ 1032.88
+ 1171
+ 1479.84
+ 943.709
+ 1007.1
+ 972.848
+ 426.682
+ 521.387
+ 410.245
+ 611.817
+ 518.251
+ 275.971
+ 121.736
+ 340.805
+ 339.366
+ 366.302
+ 316.195
+ 330.954
+ 279.531
+ 222.748
+ 144.415
+ 85.0159
+ 53.973
+ 161.893
+ 160.503
+ 56.6379
+ 31.0136
+ 60.6738
+ 84.9317
+ 150.22
+ 49.5795
+ 47.1289
+ 63.8387
+ 66.2654
+ 63.7719
+ 83.4106
+ 65.4816
+ 69.6394
+ 50.81
+ 44.8574
+ 27.644
+ 40.8906
+ 35.1597
+ 42.6025
+ 31.6001
+ 37.5723
+ 25.3892
+ 28.1768
+ 27.3481
+ 16.5117
+ 22.5
+ 21.5493
+ 19.2407
+ 15.3521
+ 18.4038
+ 17.5859
+ 18.2295
+ 19.6016
+ 13.7988
+ 13.1401
+ 16.853
+ 10.5254
+ 17.2183
+ 20.1689
+ 8.6582
+ 12.9146
+ 10.8247
+ 19.3706
+ 12.2192
+ 10.0454
+ 10.1987
+ 14.7212
+ 13.3091
+ 11.3843
+ 8.39453
+ 15.3032
+ 7.54541
+ 5.75293
+ 8.97412
+ 9.21631
+ 4.33496
+ 8.62891
+ 9.74365
+ 7.77832
+ 7.62891
+ 8.146
+ 4.46729
+ 6.93555
+ 7.59277
+ 3.74805
+ 6.5293
+ 5.56543
+ 1.81396
+ 2.90186
+ 6.11475
+ 2.9834
+ 2.83301
+ 7.88477
+ 6.43457
+ 3.20215
+ 3.72607
+ 3.84521
+ 1.07422
+ 1
+ 0.774414
+ 0.225586
+ 0
+ 1.2583
+ 3.78613
+ 2.87598
+ 0.475586
+ 1.43799
+ 5.43652
+ 2.14551
+ 1.729
+ 2.60107
+ 1.25391
+ 0.911621
+ 1.98242
+ 0.105957
+ 0.767578
+ 0.641602
+ 1.59082
+ 0
+ 0
+ 0
+ 0.779785
+ 2.04736
+ 0.172852
+ 3.7817e-016
+ 1.13867
+ 0.861328
+ 0.0263672
+ 2.87207
+ 1.10156
+ 2.32324
+ 2.19824
+ 0.478516
+ 0.634766
+ 0.4375
+ 1.94531
+ 1.9292
+ 1.05322
+ 0
+ 0
+ 0
+ 2
+ 0
+ 1
+ 1.85615e-016
+ 1.85615e-016
+ 1.85615e-016
+ 1.85615e-016
+ 1.85615e-016
+ 0.62793
+ 0.437988
+ 0.934082
+ 4.64039e-017
+ 4.64039e-017
+ 4.64039e-017
+ 4.64039e-017
+ 4.64039e-017
+ 1
+ 0
+ 1
+ 0
+[end]
+CHK1= 002B5A5D
+CHK2= 57D803C7
+CHK3= 04356010
+CHK4= 744C317E
+CHK5= C:\MS\Demodata\Ovp#m3.#m3
+[eof]

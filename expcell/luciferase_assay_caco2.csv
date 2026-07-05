@@ -1,0 +1,13 @@
+Condition,Replicate,Day,Value
+Control,Control1,1,2.95E+07
+Control,Control1,1,3.72E+07
+Control,Control2,1,2.81E+07
+Control,Control2,1,2.87E+07
+CRISPR,CRISPR1,1,2.45E+07
+CRISPR,CRISPR1,1,2.50E+07
+CRISPR,CRISPR2,1,4.82E+07
+CRISPR,CRISPR2,1,4.84E+07
+Mock,Mock1,1,6.71E+03
+Mock,Mock1,1,1.04E+04
+Mock,Mock2,1,2.53E+03
+Mock,Mock2,1,3.25E+03

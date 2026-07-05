@@ -8,9 +8,9 @@ light_path = 0.78 # cm
 enzyme_conc = 0.1*10^-3 # mM
 
 data <- read_excel("/Users/b246357/Documents/uni/biophysical/ex8data.xlsx", skip=2) #%>% rename(time_s = time)
-data_g1 <- data %>% select(Time, matches("[A-G]{1}[2-3]{1}$"))
-data_g2 <- data %>% select(Time, matches("[A-G]{1}[7-9]{1}$"))
-data_g3 <- data %>% select(Time, matches("[A-G]{1}(10|11|12)\\b{1}$"))
+data_g1 <- data %>% dplyr::select(Time, matches("[A-G]{1}[2-3]{1}$"))
+data_g2 <- data %>% dplyr::select(Time, matches("[A-G]{1}[7-9]{1}$"))
+data_g3 <- data %>% dplyr::select(Time, matches("[A-G]{1}(10|11|12)\\b{1}$"))
 data_g1 <- data_g1[1:7, ]
 data_g2 <- data_g2[1:7, ]
 data_g3 <- data_g3[1:7, ]
@@ -26,7 +26,7 @@ data_g1_long %>% ggplot(aes(y=absorbance, x=Time))+geom_point()+facet_wrap(.~wel
 data_g2_long %>% ggplot(aes(y=absorbance, x=Time))+geom_point()+facet_wrap(.~well, nrow=2) # 7 looks good
 data_g3_long %>% ggplot(aes(y=absorbance, x=Time))+geom_point()+facet_wrap(.~well, nrow=2) # 7 looks good
 
-regressions_g1 <- data_g1 %>% select(-Time) %>% lapply(function(absorbance){
+regressions_g1 <- data_g1 %>% dplyr::select(-Time) %>% lapply(function(absorbance){
   conc <- 10^3 * absorbance/(nadh_e * light_path) # convert absorbance to mM
   model <- lm(conc ~ data_g1$Time)
   coefs <- broom::tidy(model)

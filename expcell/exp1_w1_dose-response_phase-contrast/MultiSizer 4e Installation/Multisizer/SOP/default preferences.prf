@@ -1,0 +1,637 @@
+[common]
+Program=Beckman Coulter Multisizer
+CPName=ANSI code page 1252 Latin 1 (US, Western Europe)
+Version=Preliminary 4.02.39    12 Nov 2013 09:20
+Format= 201
+ftype= 201
+File=C:\Multisizer4e\SOP\default preferences.prf
+Saved= 1386188781  15:26:21   4 Dec 2013
+ReSaved= 1386188781  15:26:21   4 Dec 2013
+Author=Beckman Coulter
+Comment3=default preferences
+[#ReportOrder]
+ 8
+ 24
+ 16
+ 18
+ 0
+[Reports]
+ShortInfo= 0
+GraphSize= 1
+CustomGraphHeight= 75
+PrintAmount= 0
+PrintSkew= 0
+PrintKurt= 0
+PrintLimits= 1
+PrintMMRatio= 0
+PrintSD= 1
+PrintVariance= 0
+PrintCV= 0
+PrintInterp= 0
+PrintInterpGT= 0
+PrintSize2= 0
+PrintSize2GT= 0
+PrintMode= 1
+PrintSSA= 0
+PrintD10= 1
+PrintD50= 1
+PrintD90= 1
+PrintCDiam= 0
+PrintMean= 1
+PrintMedian= 1
+StatRange= 0
+StatMinSize= 0
+StatMaxSize= 0
+PlusMinus= 0
+GraphMean= 1
+GraphMedian= 1
+GraphMode= 1
+GraphSD= 1
+GraphCV= 0
+GrCustDiam= 0
+GraphSSA= 0
+GraphD10= 0
+GraphD50= 0
+GraphD90= 0
+GraphPos= 1
+PrGrStats= 0
+ScrnGrStats= 1
+PrintKd= 0
+Grid= 0
+SGridColor=0,0,0,0,0,0
+PGridColor=0,0,0,0,0,0
+ScreenRot= 0
+KeyPos= 0
+NumFormat= 0
+Unrounded= 0
+IsoDate= 0
+GMTTime= 0
+Iso9276= 0
+ExpFormat= 0
+Printer=
+DefSpace= 0
+DefViewMode= 4609
+[#Colors]
+ 16711680,0,0,0,0,1
+ 128,0,0,0,0,1
+ 255,0,0,0,0,1
+ 8388608,0,0,0,0,1
+ 65280,0,0,0,0,1
+ 32768,0,0,0,0,1
+ 16711935,0,0,0,0,1
+ 16711935,0,0,0,0,1
+ 16776960,0,0,0,0,1
+ 16776960,0,0,0,0,1
+ 128,0,0,0,0,1
+ 128,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+[#PrColors]
+ 0,0,0,0,0,1
+ 0,0,1,0,0,1
+ 0,0,1,0,0,1
+ 0,0,2,0,0,1
+ 0,0,2,0,0,1
+ 0,0,3,0,0,1
+ 0,0,3,0,0,1
+ 0,0,4,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+ 0,0,0,0,0,1
+[SizeInfo]
+Femto= 0
+LowerCaseLiter= 0
+M2PerG= 0
+Cell= 0
+Smooth= 0
+TSSmooth= 0
+NegSub= 0
+Z2LastChan= 0
+CalByMean= 0
+CalByVolume= 0
+CalRuns= 1
+MaxShowPulses= 5010
+MaxListLines= 5010
+ShowFilterSizes= 1
+TSYctl2= 5081
+[Graphs0]
+XAxis=70, 0, 0, 0
+YAxis0=1, 0, 0, 0
+Fill= 0
+ErrFill= 19
+RevX= 0
+LogX= 1
+LogY= 0
+AreaNorm= 0
+DefCursors= 0
+ShowMSCursors= 0
+CustomTitle= 0
+Grid= 0
+KeyPos= 0
+[Graphs1]
+XAxis=56, 0, 0, 0
+YAxis0=40, 0, 0, 0
+Fill= 5
+ErrFill= 23
+RevX= 0
+LogX= 0
+LogY= 0
+AreaNorm= 0
+DefCursors= 0
+ShowMSCursors= 0
+CustomTitle= 0
+Grid= 0
+KeyPos= 0
+[Graphs2]
+XAxis=284, 9, 0, 0
+YAxis0=315, 9, 0, 0
+Fill= 5
+ErrFill= 20
+RevX= 0
+LogX= 0
+LogY= 0
+AreaNorm= 0
+DefCursors= 0
+ShowMSCursors= 0
+CustomTitle= 0
+Grid= 0
+KeyPos= 0
+[Graphs3]
+XAxis=322, 9, 0, 0
+YAxis0=324, 9, 0, 0
+Fill= 2
+ErrFill= 19
+RevX= 0
+LogX= 0
+LogY= 0
+AreaNorm= 0
+DefCursors= 0
+ShowMSCursors= 0
+CustomTitle= 0
+Grid= 0
+KeyPos= 0
+[List0]
+XCol=70, 0, 0, 0
+YCol0=4, 0, 1, 0
+CursorSel= 0
+UserRange= 0
+UserMin= 0
+UserMax= 0
+ShowChan= 0
+ShowSize= 0
+GroupSize= 1
+SumGroup= 1
+[List1]
+XCol=56, 0, 0, 0
+YCol0=40, 0, 0, 0
+CursorSel= 0
+UserRange= 0
+UserMin= 0
+UserMax= 0
+ShowChan= 1
+ShowSize= 0
+GroupSize= 1
+SumGroup= 1
+[List2]
+XCol=284, 9, 0, 0
+YCol0=282, 0, 0, 0
+CursorSel= 0
+UserRange= 0
+UserMin= 0
+UserMax= 0
+ShowChan= 1
+ShowSize= 0
+GroupSize= 1
+SumGroup= 1
+[List3]
+XCol=322, 9, 0, 0
+YCol0=323, 0, 0, 0
+CursorSel= 0
+UserRange= 0
+UserMin= 0
+UserMax= 0
+ShowChan= 1
+ShowSize= 0
+GroupSize= 1
+SumGroup= 1
+[Stats0]
+GeomStats= 0
+StatCp= 0
+StatCq= 0
+StatY0=1, 0, 0, 0
+[#Percentiles0]
+10
+25
+50
+75
+90
+-1
+-1
+-1
+-1
+[#PercentilesGT0]
+10
+25
+50
+75
+90
+-1
+-1
+-1
+-1
+[#Sizes0]
+1
+10
+100
+1000
+-1
+-1
+-1
+-1
+-1
+[#SizesGT0]
+1
+10
+100
+1000
+-1
+-1
+-1
+-1
+-1
+[Stats1]
+GeomStats= 0
+StatCp= 0
+StatCq= 0
+[#Percentiles1]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[#PercentilesGT1]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[#Sizes1]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[#SizesGT1]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[Stats2]
+GeomStats= 0
+StatCp= 0
+StatCq= 0
+[#Percentiles2]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[#PercentilesGT2]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[#Sizes2]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[#SizesGT2]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[Stats3]
+GeomStats= 0
+StatCp= 0
+StatCq= 0
+[#Percentiles3]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[#PercentilesGT3]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[#Sizes3]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[#SizesGT3]
+0
+0
+0
+0
+0
+0
+0
+0
+0
+[Interpolation0]
+Range= 1
+MinSize= 0
+MaxSize= 0
+InterpXtoY= 0
+InterpolateUnder= 0
+InterpolateOver= 0
+InterpolateDiff= 0
+InterpY0=4, 0, 1, 0
+[#Interpolation0]
+10
+25
+50
+75
+90
+[#InterpolationY0]
+10
+25
+50
+75
+90
+[Averaging]
+Size=1, 0, 0, 0
+ErrBarType= 7426
+SetTrLimits= 0
+AvgShowPath= 0
+AvgBackSub= 0
+AvgFepa43D= 0
+NumIntOnly= 0
+HiTrLimits= 0
+ShowTrLimits= 1
+AddAllTrends= 0
+DApct= 1
+DBpct= 5
+DCpct= 95
+PAvgMode= 0
+PMinAvgDiam= 0
+PMaxAvgDiam= 0
+[Fonts]
+GraphFontStr=Arial
+GraphHeight= -16
+GraphWt= 700
+GraphIt= 0
+InfoFontStr=Arial
+InfoHeight= -16
+InfoWt= 400
+InfoIt= 0
+ListFontStr=Arial
+ListHeight= -15
+ListWt= 400
+ListIt= 0
+HdrFontStr=Arial
+HdrHeight= -19
+HdrWt= 400
+HdrIt= 0
+BrCdFontStr=
+BrCdHeight= 22
+BrCdWt= 400
+BrCdIt= 0
+[PageSetup]
+Title=
+UseTitle= 0
+LeftMar= 0
+RightMar= 0
+TopMar= 0
+BottomMar= 0
+ShowDate= 1
+ShowTime= 1
+NumberPage= 1
+PrScrnColors= 1
+Logo= 1
+LogoFile=
+LogoRes= 0
+Landscape= 0
+Text= 0
+WarnText= 128
+Back= 16777215
+ListText= 0
+ListBack= 16777215
+StatsText= 0
+StatsBack= 16777215
+GraphStatsText= 0
+GraphStatsBack= 16777215
+ScreenWrap= 1
+PrinterWrap= 1
+AddOutline= 0
+[Export]
+ExpFormat= 0
+ExpHeader= 1
+ExpShortHdr= 1
+ExpStats= 1
+ExpAllStats= 1
+ExpAvgStats= 0
+ExpList= 0
+ExpPulse= 0
+ExpInterp= 0
+ExpExt=XLS
+CommaExt=CSV
+BlnkExt=SPC
+HTMLExt=HTM
+HTMLBrdr= 0
+HTMLCellSpc= 0
+HTMLCellPadd= 0
+ExpClip= 0
+ExpAllRuns= 0
+Unrounded= 0
+ExpCustomDir= 0
+ExpDir=
+[Import]
+Chans= 0
+Row= 1
+XCol= 1
+XUnits= 2694
+Edge= 2591
+YCol= 2
+YUnits= 2690
+Diff= 0
+[OverlayStats]
+PrintAmount= 1
+PrintSkew= 0
+PrintKurt= 0
+PrintLimits= 0
+PrintMMRatio= 0
+PrintSD= 1
+PrintVariance= 0
+PrintCV= 1
+PrintInterp= 0
+PrintInterpGT= 0
+PrintSize2= 0
+PrintSize2GT= 0
+PrintMode= 0
+PrintSSA= 0
+PrintD10= 0
+PrintD50= 0
+PrintD90= 0
+PrintCDiam= 0
+PrintMean= 1
+PrintMedian= 1
+StatRange= 0
+StatMinSize= 0
+StatMaxSize= 0
+PlusMinus= 0
+GraphMean= 0
+GraphMedian= 0
+GraphMode= 0
+GraphSD= 0
+GraphCV= 0
+GrCustDiam= 0
+GraphSSA= 0
+GraphD10= 0
+GraphD50= 0
+GraphD90= 0
+GraphPos= 0
+PrGrStats= 0
+ScrnGrStats= 0
+PrintKd= 0
+[TrendStats]
+PrintAmount= 0
+PrintSkew= 0
+PrintKurt= 0
+PrintLimits= 0
+PrintMMRatio= 0
+PrintSD= 1
+PrintVariance= 0
+PrintCV= 1
+PrintInterp= 0
+PrintInterpGT= 0
+PrintSize2= 0
+PrintSize2GT= 0
+PrintMode= 0
+PrintSSA= 0
+PrintD10= 0
+PrintD50= 0
+PrintD90= 0
+PrintCDiam= 0
+PrintMean= 1
+PrintMedian= 1
+StatRange= 0
+StatMinSize= 0
+StatMaxSize= 0
+PlusMinus= 0
+GraphMean= 0
+GraphMedian= 0
+GraphMode= 0
+GraphSD= 0
+GraphCV= 0
+GrCustDiam= 0
+GraphSSA= 0
+GraphD10= 0
+GraphD50= 0
+GraphD90= 0
+GraphPos= 0
+PrGrStats= 0
+ScrnGrStats= 0
+PrintKd= 0
+[#FilterDiam]
+1
+2
+3
+4
+5
+10
+20
+[Categories]
+PrintRange= 1
+GraphRange= 1
+PrintTotal= 1
+GraphTotal= 1
+PrintCat= 0
+GraphCat= 0
+OverlayCat= 0
+CatType= 0
+Size0= 0
+Name0=
+Size1= 0
+Name1=
+Size2= 0
+Name2=
+Size3= 0
+Name3=
+Size4= 0
+Name4=
+[end]
+CHK1= 001C76F7
+CHK2= 0CE70277
+CHK3= 0366002F
+CHK4= 6572AD77
+CHK5= C:\Multisizer4e\SOP\default preferences.prf
+[eof]
