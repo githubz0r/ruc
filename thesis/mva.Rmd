@@ -1,0 +1,476 @@
+---
+title: "statistics"
+output:
+  pdf_document: default
+  html_document: default
+date: "2026-09-16"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ASICS)
+library(pheatmap)
+```
+
+## heatmap visualization
+
+
+```{r cars}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(pheatmap)
+
+set.seed(42)
+
+# Experimental design
+subjects <- paste0("S", sprintf("%02d", 1:20))
+
+metadata <- data.frame(
+  subject = subjects,
+  condition = rep(c("Control", "Treatment"), each = 10)
+)
+
+metabolites <- c(
+  "Glucose", "Lactate", "Alanine", "Acetate",
+  "Glutamate", "Glutamine", "Citrate", "Pyruvate",
+  "Valine", "Leucine", "Isoleucine", "Choline"
+)
+
+times <- c("T0", "Week1", "Month1")
+
+# Generate BEFORE measurements
+toy <- expand_grid(
+  subject = subjects,
+  time = times,
+  metabolite = metabolites
+) |>
+  left_join(metadata, by = "subject") |>
+  mutate(
+    before = rlnorm(
+      n(),
+      meanlog = 2,
+      sdlog = 0.3
+    )
+  )
+
+toy <- toy |>
+  mutate(
+    true_log2fc = case_when(
+
+      # Glucose decreases after meal
+      metabolite == "Glucose" ~ -0.8,
+
+      # Lactate increases
+      metabolite == "Lactate" ~ 0.7,
+
+      # Treatment progressively increases acetate response
+      metabolite == "Acetate" &
+        condition == "Treatment" &
+        time == "T0" ~ 0.2,
+
+      metabolite == "Acetate" &
+        condition == "Treatment" &
+        time == "Week1" ~ 0.8,
+
+      metabolite == "Acetate" &
+        condition == "Treatment" &
+        time == "Month1" ~ 1.4,
+
+      # Treatment changes glutamate response
+      metabolite == "Glutamate" &
+        condition == "Treatment" ~ 0.8,
+
+      TRUE ~ 0
+    ),
+
+    # Add biological noise to meal response
+    observed_log2fc =
+      true_log2fc + rnorm(n(), 0, 0.25),
+
+    # Generate AFTER measurement
+    after =
+      before * 2^observed_log2fc
+  )
+
+toy <- toy |>
+  mutate(
+    log2FC = log2(after / before)
+  )
+```
+
+generate a toy FC matrix
+
+
+```{r pressure}
+fc_matrix <- toy |>
+  select(
+    subject,
+    condition,
+    time,
+    metabolite,
+    log2FC
+  ) |>
+  unite(
+    "sample",
+    subject,
+    time,
+    remove = FALSE
+  ) |>
+  select(sample, metabolite, log2FC) |>
+  pivot_wider(
+    names_from = metabolite,
+    values_from = log2FC
+  ) |>
+  tibble::column_to_rownames("sample") |>
+  as.matrix()
+
+```
+
+
+## not very useful heatmap
+```{r}
+annotation <- toy |>
+  distinct(subject, condition, time) |>
+  unite("sample", subject, time, remove = FALSE) |>
+  select(sample, condition, time) |>
+  tibble::column_to_rownames("sample") |>
+  as.data.frame()
+
+annotation$condition <- factor(annotation$condition)
+annotation$time <- factor(
+  annotation$time,
+  levels = c("T0", "Week1", "Month1")
+)
+
+pheatmap(
+  t(fc_matrix),
+  annotation_col = annotation,
+  scale = "none",
+  border_color = NA,
+  clustering_distance_cols = "euclidean",
+  clustering_distance_rows = "euclidean"
+)
+```
+
+3 heatmaps instead?
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(pheatmap)
+library(gridExtra)
+
+make_fc_heatmap <- function(df, timepoint, annotation_cols = NULL) {
+  mat <- df |>
+    filter(time == timepoint) |>
+    select(subject, metabolite, log2FC) |>
+    pivot_wider(names_from = metabolite, values_from = log2FC) |>
+    tibble::column_to_rownames("subject") |>
+    as.matrix()
+
+  ann <- df |>
+    filter(time == timepoint) |>
+    distinct(subject, condition) |>
+    tibble::column_to_rownames("subject")
+
+  pheatmap(
+    t(mat),
+    annotation_col = ann,
+    scale = "none",
+    cluster_rows = TRUE,
+    cluster_cols = TRUE,
+    border_color = NA,
+    silent = TRUE
+  )$gtable
+}
+
+h0 <- make_fc_heatmap(toy, "T0")
+h1 <- make_fc_heatmap(toy, "Week1")
+h2 <- make_fc_heatmap(toy, "Month1")
+
+gridExtra::grid.arrange(h0, h1, h2, ncol = 3)
+```
+
+
+
+
+PCA
+```{r}
+pca <- prcomp(fc_matrix, center = TRUE, scale. = TRUE)
+
+scores <- as.data.frame(pca$x[, 1:2]) |>
+  tibble::rownames_to_column("sample") |>
+  left_join(annotation |> tibble::rownames_to_column("sample"),
+            by = "sample") |> mutate(condition_time = paste(condition, time, sep = '_'))
+
+ggplot(scores, aes(PC1, PC2, color = condition, shape = time)) +
+  geom_point(size = 3) +
+  theme_classic()
+
+```
+
+heatmap with same ordering
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(pheatmap)
+library(gridExtra)
+
+plot_fc_heatmaps <- function(df, times = c("T0", "Week1", "Month1"),
+                             top_n = 30) {
+
+  # Select most variable metabolites across all time points
+  top_metabolites <- df |>
+    group_by(metabolite) |>
+    summarise(
+      variance = var(log2FC, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    arrange(desc(variance)) |>
+    slice_head(n = top_n) |>
+    pull(metabolite)
+
+  df <- df |> filter(metabolite %in% top_metabolites)
+
+  # Common scale
+  max_abs <- max(abs(df$log2FC), na.rm = TRUE)
+  breaks <- seq(-max_abs, max_abs, length.out = 101)
+
+  cols <- colorRampPalette(
+    c("blue", "white", "red")
+  )(100)
+
+  # Common row order
+  row_order <- df |>
+    group_by(metabolite) |>
+    summarise(mean_fc = mean(log2FC, na.rm = TRUE), .groups = "drop") |>
+    arrange(mean_fc) |>
+    pull(metabolite)
+
+  make_plot <- function(tp) {
+
+    mat <- df |>
+      filter(time == tp) |>
+      select(subject, metabolite, log2FC) |>
+      pivot_wider(names_from = metabolite, values_from = log2FC) |>
+      tibble::column_to_rownames("subject") |>
+      as.matrix()
+
+    mat <- t(mat)
+    mat <- mat[row_order[row_order %in% rownames(mat)], , drop = FALSE]
+
+    ann <- df |>
+      filter(time == tp) |>
+      distinct(subject, condition) |>
+      tibble::column_to_rownames("subject")
+
+    pheatmap(
+      mat,
+      annotation_col = ann,
+      cluster_rows = FALSE,
+      cluster_cols = TRUE,
+      scale = "none",
+      breaks = breaks,
+      color = cols,
+      border_color = NA,
+      main = tp,
+      silent = TRUE
+    )$gtable
+  }
+
+  gridExtra::grid.arrange(
+    grobs = lapply(times, make_plot),
+    ncol = length(times)
+  )
+}
+
+plot_fc_heatmaps(toy, top_n = 30)
+```
+
+volcano plot idea, note that the p.value in this case might be different from the emmeans one below
+```{r}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+make_fc_volcano <- function(df, timepoint,
+                            label_n = 10) {
+
+  stats <- df |>
+    filter(time == timepoint) |>
+    group_by(metabolite) |>
+    summarise(
+      control_fc = mean(log2FC[condition == "Control"], na.rm = TRUE),
+      treatment_fc = mean(log2FC[condition == "Treatment"], na.rm = TRUE),
+      log2_fc_fc = treatment_fc - control_fc,
+      p_value = t.test(
+        log2FC[condition == "Control"],
+        log2FC[condition == "Treatment"]
+      )$p.value,
+      .groups = "drop"
+    ) |>
+    mutate(
+      FDR = p.adjust(p_value, method = "BH"),
+      neg_log10_p = -log10(p_value)
+    )
+
+  labels <- stats |>
+    arrange(FDR) |>
+    slice_head(n = label_n)
+
+  ggplot(stats, aes(log2_fc_fc, neg_log10_p)) +
+    geom_point() +
+    geom_vline(xintercept = 0, linetype = "dashed") +
+    geom_text(
+      data = labels,
+      aes(label = metabolite),
+      vjust = -0.7,
+      size = 3
+    ) +
+    labs(
+      title = timepoint,
+      x = "log2(fold-change of fold-change)",
+      y = "-log10(p-value)"
+    ) +
+    theme_classic()
+}
+
+p0 <- make_fc_volcano(toy, "T0")
+p1 <- make_fc_volcano(toy, "Week1")
+p2 <- make_fc_volcano(toy, "Month1")
+
+p0 + p1 + p2
+```
+
+individual metabolite trajectories, note that these need to be fixed so that the correct chronology is shown (t0, w1, month0), chatGPT isn't aware of time
+```{r}
+toy |>
+  filter(metabolite %in% c(
+    "Lactate", "Glucose", "Alanine", "Acetate"
+  )) |>
+  ggplot(
+    aes(
+      x = time,
+      y = log2FC,
+      group = subject,
+      color = condition
+    )
+  ) +
+  geom_line(alpha = 0.2) +
+  stat_summary(
+    aes(group = condition),
+    fun = mean,
+    geom = "line",
+    linewidth = 1
+  ) +
+  stat_summary(
+    aes(group = condition),
+    fun = mean,
+    geom = "point",
+    size = 2
+  ) +
+  facet_wrap(~ metabolite, scales = "free_y") +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_classic()
+```
+
+## lme
+```{r}
+library(lme4)
+library(lmerTest)
+fit <- lmer(
+  log2FC ~ condition * time + (1 | subject),
+  data = toy
+)
+```
+
+
+```{r}
+library(dplyr)
+library(lme4)
+library(lmerTest)
+library(broom.mixed)
+
+results <- toy |>
+  group_by(metabolite) |>
+  group_modify(\(d, ...) {
+    fit <- lmer(
+      log2FC ~ condition * time + (1 | subject),
+      data = d
+    )
+
+    broom.mixed::tidy(fit, effects = "fixed")
+  }) |>
+  ungroup()
+
+
+```
+
+
+  
+```{r}
+library(lme4)
+library(lmerTest)
+library(emmeans)
+library(dplyr)
+
+results <- toy |>
+  group_by(metabolite) |>
+  group_modify(\(d, ...) {
+
+    fit <- lmer(
+      log2FC ~ condition * time + (1 | subject),
+      data = d
+    )
+
+    emm <- emmeans(
+      fit,
+      ~ condition | time
+    )
+
+    as.data.frame(
+      pairs(emm)
+    )
+  }) |>
+  ungroup()
+
+print(results)
+```
+
+sanity check
+```{r}
+d <- toy |>
+  filter(metabolite == "Acetate")
+
+fit <- lmer(
+  log2FC ~ condition * time + (1 | subject),
+  data = d
+)
+
+emm <- emmeans(
+  fit,
+  ~ condition | time
+)
+
+# All condition comparisons
+pairs(emm)
+
+# Month1 only
+pairs(emm) |>
+  as.data.frame() |>
+  filter(time == "Month1")
+
+d |>
+  filter(time == "Month1") |>
+  group_by(condition) |>
+  summarise(
+    mean_log2FC = mean(log2FC),
+    sd = sd(log2FC),
+    n = n()
+  )
+```
+
+

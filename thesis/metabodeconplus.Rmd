@@ -1,0 +1,145 @@
+---
+title: "metabodeconplus"
+output:
+  pdf_document: default
+  html_document: default
+date: "2026-09-16"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(magrittr)
+library(metabodeconplus)
+```
+
+## simulated datafrom metabodecon packages
+
+
+```{r cars}
+sim_dir <- metabodeconplus::metabodeconplus_file("bruker/sim")
+sim <- metabodeconplus::read_spectra(sim_dir)
+deconvoluted_spectra_sim <- metabodeconplus::deconvolute(
+    sim,                 # The object containing spectra
+    sfr = c(3.35, 3.55), # Borders of signal free region (SFR) in ppm
+    smit = 2, smws = 5,  # Smoothing parameters
+    verbose = FALSE      # Disable verbose output
+)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+# Visualize the first spectrum.
+metabodeconplus::plot_spectrum(deconvoluted_spectra_sim[[1]])
+
+# Visualize the second spectrum, this time without the legend.
+metabodeconplus::plot_spectrum(deconvoluted_spectra_sim[[1]], lgd = FALSE)
+
+# Visualize all spectra and save them to a pdf file
+pdfpath <- tempfile(fileext = ".pdf")
+pdf(pdfpath)
+for (x in deconvoluted_spectra_sim) {
+    metabodeconplus::plot_spectrum(x, main = x$filename)
+}
+dev.off()
+cat("Plots saved to", pdfpath, "\n")
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+# Plot spectra before alignment. Only show spectra 1-8 for clarity.
+metabodeconplus::plot_spectra(deconvoluted_spectra_sim[1:8], lgd = FALSE)
+
+# Align spectra and plot again.
+aligned_spectra_sim <- metabodeconplus::align(deconvoluted_spectra_sim)
+metabodeconplus::plot_spectra(aligned_spectra_sim[1:8])
+```
+
+## load own spectra
+Note that the expected folder structure is a bit different for this package, but I was lazy so didn't wanna change my own folder structure, this is why they all end up having the same name.
+```{r}
+spectral_dir <- "/Users/b246357/Documents/uni/thesis/media_extraction_comparison/Lars260911"
+spectra <- 1:9 %>% lapply(function(x){read_spectrum(spectral_dir, 'bruker', x, 1)}) %>% as_spectra()
+deconvoluted_spectra <- metabodeconplus::deconvolute(
+    spectra,                 # The object containing spectra
+    sfr = c(0, 7.5), # Borders of signal free region (SFR) in ppm
+    smit = 2, smws = 5,  # Smoothing parameters
+    verbose = FALSE      # Disable verbose output
+)
+```
+
+
+```{r}
+# Visualize the first spectrum.
+metabodeconplus::plot_spectrum(deconvoluted_spectra[[1]], foc_rgn = c(4.5,5.5))
+
+# Visualize the second spectrum, this time without the legend.
+#metabodeconplus::plot_spectrum(deconvoluted_spectra[[1]], foc_rgn = c(-0.5,7.5))
+metabodeconplus::plot_spectra(deconvoluted_spectra, foc_rgn = c(-0.5,7.5))
+# Visualize all spectra and save them to a pdf file
+pdfpath <- tempfile(fileext = ".pdf")
+pdf(pdfpath)
+for (x in deconvoluted_spectra) {
+    metabodeconplus::plot_spectrum(x, main = x$filename)
+}
+dev.off()
+cat("Plots saved to", pdfpath, "\n")
+```
+
+check nr 7 coz' it's scuffed
+```{r}
+metabodeconplus::plot_spectrum(deconvoluted_spectra[[7]], foc_rgn = c(3,4))
+test_spectrum <- spectra[[7]]
+test_deconv <- deconvolute(test_spectrum)
+```
+
+
+
+Align spectra
+```{r}
+# Plot spectra before alignment. Only show spectra 1-8 for clarity.
+metabodeconplus::plot_spectra(deconvoluted_spectra[1:9], foc_rgn = c(-0.2,7.5))
+
+# Align spectra and plot again.
+harmonized_spectra <- metabodeconplus::harmonize_grid(deconvoluted_spectra, target = "median", pad = 0)
+aligned_spectra <- metabodeconplus::align(harmonized_spectra[-7]) # issues with spectrum 7 because of low intensity
+#aligned_spectra <- metabodeconplus::align(deconvoluted_spectra[-7])
+metabodeconplus::plot_spectra(aligned_spectra[1:8], foc_rgn = c(-0.2,7.5))
+```
+
+```{r}
+binned <- metabodeconplus::bin(aligned_spectra)
+pca_binned <- prcomp(binned)
+
+pca_binned_df <- data.frame(pc1=pca_binned$x[1, ], pc2 = pca_binned$x[2,])
+pca_binned_df %<>% mutate(extraction_method = c('E', 'K', 'E', 'E', 'K', 'K', 'E','E'),
+                          media_type = c('unknown', '+cell', '+cell', '-cell', '-cell', '-cell', '-cell', '+cell'))
+pca_binned_df %>% ggplot(aes(x = pc1, y= pc2, col = extraction_method, shape = media_type )) + geom_point()
+```
+
+
+signal integral matrix
+```{r}
+signalintegral <- metabodeconplus::si_mat(aligned_spectra)
+pca_signalintegral <- prcomp(signalintegral)
+
+pca_signalintegral_df <- data.frame(pc1=pca_signalintegral$x[1, ], pc2 = pca_signalintegral$x[2,])
+pca_signalintegral_df %<>% mutate(extraction_method = c('E', 'K', 'E', 'E', 'K', 'K', 'E','E'),
+                          media_type = c('unknown', '+cell', '+cell', '-cell', '-cell', '-cell', '-cell', '+cell'))
+pca_signalintegral_df %>% ggplot(aes(x = pc1, y= pc2, col = extraction_method, shape = media_type )) + geom_point()
+```
+
+peak mat
+
+```{r}
+peak_mat <- metabodeconplus::si_mat(aligned_spectra)
+pca_peak_mat <- prcomp(peak_mat)
+
+pca_peak_mat_df <- data.frame(pc1=pca_peak_mat$x[1, ], pc2 = pca_peak_mat$x[2,])
+pca_peak_mat_df %<>% mutate(extraction_method = c('E', 'K', 'E', 'E', 'K', 'K', 'E','E'),
+                          media_type = c('unknown', '+cell', '+cell', '-cell', '-cell', '-cell', '-cell', '+cell'))
+pca_peak_mat_df %>% ggplot(aes(x = pc1, y= pc2, col = extraction_method, shape = media_type )) + geom_point()
+```
+

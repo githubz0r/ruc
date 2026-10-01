@@ -1,0 +1,174 @@
+---
+title: "ASICS"
+output:
+  pdf_document: default
+  html_document: default
+date: "2026-09-16"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(magrittr)
+library(ASICS)
+library(pheatmap)
+```
+
+## ASICS vignette example
+
+
+```{r cars}
+current_path <- system.file("extdata", "example_spectra", package = "ASICS")
+spectra_data <- importSpectraBruker(current_path)
+spectra_obj <- createSpectra(spectra_data)
+to_exclude <- matrix(c(4.5, 10), ncol = 2)
+resASICS <- ASICS(spectra_obj, exclusion.areas = to_exclude, verbose = FALSE)
+
+```
+
+## Load our spectra
+
+we put ppm.grid as NULL, in which case it defaults to the pure_library ppm grid which goes from -0.5 to 10. It seems that all of the samples have slightly different ppm grids (same length, but different offsets), which messes with the function.
+```{r pressure}
+#media_spectra <- importSpectraBruker('/Users/b246357/Documents/uni/thesis/media_extraction_comparison/Lars260911', which.spectra = NULL, ppm.grid = as.numeric(colnames(signalintegral))) %>% select(-c('21', '91')) # don't load 2D spectra
+#spectral_grid <- spectra$Lars260911$cs # from metabodeconplus
+
+media_spectra <- importSpectraBruker('/Users/b246357/Documents/uni/thesis/media_extraction_comparison/only_1d_spectra', which.spectra = NULL, ppm.grid = NULL) # don't load 2D spectra
+
+```
+
+
+
+```{r}
+spectra_norm <- normaliseSpectra(media_spectra, type.norm = "pqn")
+spectra_align <- alignSpectra(spectra_norm)
+spectra_obj <- createSpectra(spectra_align)
+```
+
+
+```{r}
+to_exclude <- matrix(c(-3, -0.2, 8, 13, 4.8, 6), ncol = 2, byrow = TRUE)
+ASICS_results <- ASICS(spectra_obj, exclusion.areas = to_exclude)
+```
+
+
+```{r}
+plot(ASICS_results, idx = 1, add.metab = "Lactate")
+```
+
+
+```{r}
+plot(ASICS_results, idx = 1, add.metab = "Pyruvic-Acid")
+```
+
+
+
+PCA
+```{r}
+asics_pca <- ASICS_results@quantification %>% t() %>% prcomp(scale. = F)
+extraction_method <- c('E', 'K', 'E', 'E', 'K', 'K', 'K', 'E','E')
+media_type = c('+cell', '+cell', '+cell', '-cell', '-cell', '-cell', '+cell', '-cell', '+cell')
+
+annotation_matrix <- bind_cols(extraction_method = factor(extraction_method), media_type = factor(media_type)) %>% data.frame()
+rownames(annotation_matrix) <- ASICS_results@sample.name
+asics_pca_df <- asics_pca$x %>% as.data.frame() %>% bind_cols(annotation_matrix)
+asics_pca_df %>% ggplot(aes(x=PC1, y=PC2, col=media_type, shape=extraction_method))+geom_point(size=5)
+
+```
+
+
+heatmap
+```{r}
+metabolite_mat <- as.matrix(ASICS_results@quantification)
+metabolite_var <- apply(metabolite_mat, 1, var, na.rm = TRUE)
+
+# Keep top 30 most variable metabolites
+top <- names(sort(metabolite_var, decreasing = TRUE))[1:30]
+
+mat_top <- metabolite_mat[top, , drop = FALSE]
+
+
+pheatmap::pheatmap(
+  #metabolite_mat,
+  mat_top,
+  annotation_col = annotation_matrix,
+  cluster_cols = TRUE,
+  cluster_rows = TRUE,
+  border_color = NA,
+  fontsize_row = 7
+)
+```
+
+looks like number 7 has the highest sum but it should have the lowest?
+```{r}
+metabolite_mat |> apply(2, sum)
+```
+
+
+Try Anders' old metabolomics data
+```{r}
+nmr_csv <- read_csv('/Users/b246357/Documents/uni/thesis/gastric_ints.csv')
+gastric_metadata <- nmr_csv |> select(patient, time, PPeal, diabetes) |> 
+  mutate(sample_name = paste(patient, time, PPeal, diabetes, sep = '_'))
+gastric_df <- nmr_csv |> mutate(sample_name = paste(patient, time, PPeal, diabetes, sep = '_'), .keep = 'unused') |> relocate(sample_name)
+
+gastric_df_t <- gastric_df |> column_to_rownames("sample_name") |> t() |> as.data.frame()
+gastric_df_t <- gastric_df_t[nrow(gastric_df_t):1, ]
+
+
+gastric_norm <- normaliseSpectra(gastric_df_t, type.norm = "mean")
+gastric_align <- alignSpectra(gastric_norm)
+gastric_obj <- createSpectra(gastric_align)
+```
+
+run ASICS
+```{r}
+#gastric_asics <- ASICS(gastric_obj, ncores = 8)
+gastric_asics <- ASICS(gastric_obj)
+```
+
+save the computed object because it takes hours (if you only use 1 cor, that is)
+```{r}
+#saveRDS(gastric_asics, file = '/Users/b246357/Documents/uni/thesis/gastric_asics.rds')
+#gastric_asics <- readRDS('/Users/b246357/Documents/uni/thesis/gastric_asics.rds')
+```
+
+
+```{r}
+plot(gastric_asics, idx = 1, add.metab = "Lactate")
+```
+
+
+gastric pca
+```{r}
+gastric_pca <- gastric_asics@quantification %>% t() %>% prcomp(scale. = T)
+
+
+gastric_annotation <- gastric_metadata |> column_to_rownames("sample_name") |> mutate(gastric_annotation = paste(time, PPeal, diabetes, sep = '_'))
+gastric_pca_df <- gastric_pca$x %>% as.data.frame() %>% bind_cols(gastric_annotation)
+gastric_pca_df %>% ggplot(aes(x=PC1, y=PC2, col=diabetes))+geom_point(size=1)
+
+```
+
+
+
+```{r}
+gastric_mat <- as.matrix(gastric_asics@quantification)
+gastric_var <- apply(gastric_mat, 1, var, na.rm = TRUE)
+
+# Keep top 30 most variable gastrics
+top <- names(sort(gastric_var, decreasing = TRUE))[1:30]
+
+mat_top <- gastric_mat[top, , drop = FALSE]
+
+
+pheatmap::pheatmap(
+  #gastric_mat,
+  mat_top,
+  annotation_col = select(gastric_annotation, -c(gastric_annotation, patient)),
+  cluster_cols = TRUE,
+  cluster_rows = TRUE,
+  border_color = NA,
+  fontsize_row = 7
+)
+```
+
